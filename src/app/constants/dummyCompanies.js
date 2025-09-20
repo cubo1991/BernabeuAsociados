@@ -5,112 +5,112 @@ const companies =
       "id": 1,
       "companyName": "NovaTech Solutions",
       "ownerName": "Lucía Fernández",
-      "logoUrl": "https://placehold.co/100x100?text=NovaTech",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=NovaTech",
       "benefit": "10% en consultoría tecnológica"
     },
     {
       "id": 2,
       "companyName": "EcoVida Market",
       "ownerName": "Martín Ríos",
-      "logoUrl": "https://placehold.co/100x100?text=EcoVida",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=EcoVida",
       "benefit": "15% en productos orgánicos"
     },
     {
       "id": 3,
       "companyName": "PixelForge Studio",
       "ownerName": "Sofía Herrera",
-      "logoUrl": "https://placehold.co/100x100?text=PixelForge",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=PixelForge",
       "benefit": "Diseño gráfico sin costo en tu primer pedido"
     },
     {
       "id": 4,
       "companyName": "Andes Legal",
       "ownerName": "Julián Torres",
-      "logoUrl": "https://placehold.co/100x100?text=AndesLegal",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=AndesLegal",
       "benefit": "Primera consulta legal gratuita"
     },
     {
       "id": 5,
       "companyName": "Mate & Código",
       "ownerName": "David López Mate",
-      "logoUrl": "https://placehold.co/100x100?text=MateCodigo",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=MateCodigo",
       "benefit": "10% en desarrollo web"
     },
     {
       "id": 6,
       "companyName": "Boreal Arquitectura",
       "ownerName": "Carla Méndez",
-      "logoUrl": "https://placehold.co/100x100?text=Boreal",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=Boreal",
       "benefit": "5% en planos personalizados"
     },
     {
       "id": 7,
       "companyName": "Ruta Verde Turismo",
       "ownerName": "Federico Gómez",
-      "logoUrl": "https://placehold.co/100x100?text=RutaVerde",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=RutaVerde",
       "benefit": "Descuento en excursiones locales"
     },
     {
       "id": 8,
       "companyName": "Café del Sur",
       "ownerName": "Valentina Ruiz",
-      "logoUrl": "https://placehold.co/100x100?text=CafeSur",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=CafeSur",
       "benefit": "2x1 en cafés los viernes"
     },
     {
       "id": 9,
       "companyName": "Tierra Digital",
       "ownerName": "Ignacio Paredes",
-      "logoUrl": "https://placehold.co/100x100?text=TierraDigital",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=TierraDigital",
       "benefit": "15% en servicios de marketing"
     },
     {
       "id": 10,
       "companyName": "Luna Textil",
       "ownerName": "María Belén Castro",
-      "logoUrl": "https://placehold.co/100x100?text=LunaTextil",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=LunaTextil",
       "benefit": "Envío gratis en compras mayores a $10.000"
     },
     {
       "id": 11,
       "companyName": "Solaris Energía",
       "ownerName": "Tomás Aguirre",
-      "logoUrl": "https://placehold.co/100x100?text=Solaris",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=Solaris",
       "benefit": "10% en paneles solares"
     },
     {
       "id": 12,
       "companyName": "Alma Verde",
       "ownerName": "Camila Navarro",
-      "logoUrl": "https://placehold.co/100x100?text=AlmaVerde",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=AlmaVerde",
       "benefit": "Regalo sorpresa en tu primera compra"
     },
     {
       "id": 13,
       "companyName": "Montaña Creativa",
       "ownerName": "Diego Salinas",
-      "logoUrl": "https://placehold.co/100x100?text=Montana",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=Montana",
       "benefit": "Diseño de logo gratis para nuevos socios"
     },
     {
       "id": 14,
       "companyName": "BIA Consultora",
       "ownerName": "Juan Bernabéu",
-      "logoUrl": "https://placehold.co/100x100?text=BIA",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=BIA",
       "benefit": "Acceso exclusivo a la red de empresas"
     },
     {
       "id": 15,
       "companyName": "Andina Software",
       "ownerName": "Laura Peña",
-      "logoUrl": "https://placehold.co/100x100?text=Andina",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=Andina",
       "benefit": "15% en licencias anuales"
     },
     {
       "id": 16,
       "companyName": "Cumbre Editorial",
       "ownerName": "Esteban Molina",
-      "logoUrl": "https://placehold.co/100x100?text=Cumbre",
+      "logoUrl": "https://placehold.co/100x100.jpg?text=Cumbre",
       "benefit": "Descuento en publicaciones independientes"
     }
   ]
