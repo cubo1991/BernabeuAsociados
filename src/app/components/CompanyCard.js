@@ -3,10 +3,13 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import BenefitBadge from './BenefitBadtge';
 import BenefitRibbon from './BenefitRibbon';
+import Link from 'next/link';
 
 
 
-export default function CompanyCard({ companyName, ownerName, logoUrl, benefit, benefitType, phone, contactLink, description }) {
+
+
+export default function CompanyCard({ companyName, id, logoUrl, benefit, benefitType, phone, contactLink, description }) {
   const ref = useRef();
   const [visible, setVisible] = useState(false);
 
@@ -43,7 +46,12 @@ export default function CompanyCard({ companyName, ownerName, logoUrl, benefit, 
       </div>
 
       {/* Info */}
-      <h2 className="text-lg font-semibold">{companyName}</h2>
+      <Link href={`/empresas/${id}`}>
+  <h2 className="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors duration-200 underline-offset-2 hover:underline">
+    {companyName}
+  </h2>
+</Link>
+
       <p className="text-sm text-gray-600">{description}</p>
       <a href={contactLink} className="text-indigo-600 mt-2 hover:underline">
         Sitio Web / Instagram
