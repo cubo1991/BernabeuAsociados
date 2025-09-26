@@ -46,8 +46,8 @@ export default function Navbar() {
         <div className={`md:flex md:items-center ${isOpen ? 'block' : 'hidden'}`}>
           <ul className="flex flex-col md:flex-row md:space-x-6 mt-4 md:mt-0">
             <li><Link href="/" className="hover:text-indigo-400">Inicio</Link></li>
-            <li><Link href="/about" className="hover:text-indigo-400">Acerca</Link></li>
-            <li><Link href="/contact" className="hover:text-indigo-400">Contacto</Link></li>
+            <li><Link href="/nosotros" className="hover:text-indigo-400">Nosotros</Link></li>
+            <li><Link href="/contacto" className="hover:text-indigo-400">Contacto</Link></li>
 
             {loading ? (
               <li>
