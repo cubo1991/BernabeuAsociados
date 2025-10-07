@@ -30,7 +30,8 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
       }`}
     >
         {benefitType === 'Descuento' ? (
-      <BenefitBadge text={benefit} />
+      // <BenefitBadge text={benefit} />
+      <BenefitRibbon text={benefit} />
     ) : (
       <BenefitRibbon text={benefit} />
     )}

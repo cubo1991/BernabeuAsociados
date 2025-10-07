@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+
 import EmpresasPage from "./empresas/page";
 
 export default function Home() {
