@@ -2,7 +2,7 @@
 
 export default function NosotrosPage() {
   return (
-    <main className="p-10 bg-gray-50 text-gray-800">
+    <main className="nosotrosOscuro p-10 bg-gray-50 text-gray-800">
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-900">Sobre Nosotros</h1>
 
       <div className="space-y-6 max-w-3xl mx-auto text-lg leading-relaxed">

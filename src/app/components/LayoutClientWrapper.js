@@ -39,6 +39,7 @@ export default function LayoutClientWrapper({ children }) {
             transform: scale(1);
           }
         }
+          
       `}</style>
     </div>
   ) : (

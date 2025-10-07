@@ -2,7 +2,7 @@
 
 export default function ContactoPage() {
   return (
-    <main className="p-10 bg-gray-50 text-gray-800">
+    <main className="contactoOscuro p-10 bg-gray-50 text-gray-800">
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-900">Contacto</h1>
 
       <div className="max-w-2xl mx-auto text-lg space-y-6">

@@ -7,6 +7,7 @@
   --foreground: #171717;
   --font-color: #b2935b;
   --background-navBarcolor: #343434;
+  --foregroundDarkMode: #ededed;
 }
 
 @theme inline {
@@ -48,4 +49,34 @@ body {
   background: var(--background-navBarcolor);
   color: var(--font-color);
   font-family: 'DM Sans', Arial, Helvetica, sans-serif;
+}
+
+
+@media (prefers-color-scheme: dark) {
+  .h1Oscuro {
+    color: var(--foregroundDarkMode);
+  }
+
+  .nosotrosOscuro  {
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+
+  .nosotrosOscuro h1 {
+    color: var(--color-white);
+  }
+
+   .h1Oscuro {
+    color: var(--foregroundDarkMode);
+  }
+
+  .contactoOscuro  {
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+
+  .contactoOscuro h1 {
+    color: var(--color-white);
+  }
+  
 }
