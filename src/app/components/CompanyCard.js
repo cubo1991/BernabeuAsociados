@@ -37,7 +37,7 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
     )}
 
       {/* Logo */}
-      <div className="w-20 h-20 mb-3 relative">
+      <div className="w-50 h-50 mb-3 relative">
         <Image
           src={logoUrl}
           alt={`Logo de ${companyName}`}
