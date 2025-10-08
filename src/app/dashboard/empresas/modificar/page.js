@@ -1,3 +1,4 @@
+
 "use client";
 import { useState, useEffect } from "react";
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
@@ -12,11 +13,12 @@ export default function ModificarEmpresaPage() {
     phone: "",
     logoUrl: "",
     contactLink: "",
-    contactType: "", // 👈 nuevo campo
+    contactType: "",
     benefitType: "",
     benefit: "",
     description: "",
-    fullDescription: ""
+    fullDescription: "",
+    address: ""
   });
   const [loading, setLoading] = useState(false);
 
@@ -43,11 +45,12 @@ export default function ModificarEmpresaPage() {
           phone: empresa.phone || "",
           logoUrl: empresa.logoUrl || "",
           contactLink: empresa.contactLink || "",
-          contactType: empresa.contactType || "", 
+          contactType: empresa.contactType || "",
           benefitType: empresa.benefitType || "",
           benefit: empresa.benefit || "",
           description: empresa.description || "",
-          fullDescription: empresa.fullDescription || ""
+          fullDescription: empresa.fullDescription || "",
+          address: empresa.address || ""
         });
       }
     }
@@ -131,8 +134,6 @@ export default function ModificarEmpresaPage() {
             required
             className="input"
           />
-
-   
           <select
             name="contactType"
             value={form.contactType}
@@ -144,7 +145,6 @@ export default function ModificarEmpresaPage() {
             <option value="Instagram">Instagram</option>
             <option value="Sitio Web">Sitio Web</option>
           </select>
-
           <select
             name="benefitType"
             value={form.benefitType}
@@ -172,6 +172,13 @@ export default function ModificarEmpresaPage() {
             required
             className="input"
           />
+            <input
+            name="address"
+            placeholder="Domicilio (opcional)"
+            value={form.address}
+            onChange={handleChange}
+            className="input col-span-1 md:col-span-2"
+          />
           <textarea
             name="fullDescription"
             placeholder="Descripción completa"
@@ -180,6 +187,7 @@ export default function ModificarEmpresaPage() {
             required
             className="input col-span-1 md:col-span-2 h-32 resize-none"
           />
+        
           <button
             type="submit"
             disabled={loading}

@@ -1,12 +1,34 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 
+export default function Page({ params }) {
+  const [empresa, setEmpresa] = useState(null);
+  const [notFound, setNotFound] = useState(false);
 
-export default async function EmpresasLayout({ params, children }) {
-  const docRef = doc(db, "empresas", params.empresasId);
-  const docSnap = await getDoc(docRef);
+  useEffect(() => {
+    const fetchEmpresa = async () => {
+      try {
+        const docRef = doc(db, "empresas", params.empresasId);
+        const docSnap = await getDoc(docRef);
 
-  if (!docSnap.exists()) {
+        if (docSnap.exists()) {
+          setEmpresa({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          setNotFound(true);
+        }
+      } catch (error) {
+        console.error("Error al obtener la empresa:", error);
+        setNotFound(true);
+      }
+    };
+
+    fetchEmpresa();
+  }, [params.empresasId]);
+
+  if (notFound) {
     return (
       <div className="p-10 text-center text-red-600">
         Empresa no encontrada.
@@ -14,7 +36,13 @@ export default async function EmpresasLayout({ params, children }) {
     );
   }
 
-  const empresa = { id: docSnap.id, ...docSnap.data() };
+  if (!empresa) {
+    return (
+      <div className="p-10 text-center text-gray-500">
+        Cargando empresa...
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -27,8 +55,12 @@ export default async function EmpresasLayout({ params, children }) {
               className="w-20 h-20 object-cover rounded-full border border-gray-200"
             />
             <div>
-              <h3 className="text-2xl font-semibold text-gray-800">{empresa.companyName}</h3>
-              <p className="text-sm text-gray-500">Fundado por {empresa.ownerName}</p>
+              <h3 className="text-2xl font-semibold text-gray-800">
+                {empresa.companyName}
+              </h3>
+              <p className="text-sm text-gray-500">
+                Fundado por {empresa.ownerName}
+              </p>
             </div>
           </div>
 
@@ -41,26 +73,61 @@ export default async function EmpresasLayout({ params, children }) {
               <div className="bg-gray-100 rounded-lg p-4">
                 <h4 className="text-md font-medium text-gray-600">Beneficio</h4>
                 <p className="text-gray-800 font-semibold">{empresa.benefit}</p>
-                <span className="text-xs text-gray-500">{empresa.benefitType}</span>
               </div>
 
               <div className="bg-gray-100 rounded-lg p-4">
                 <h4 className="text-md font-medium text-gray-600">Contacto</h4>
                 <p className="text-gray-800">{empresa.phone}</p>
-                <a
-                  href={empresa.contactLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline text-sm"
-                >
-                  Ir al sitio
-                </a>
+
+                {empresa.contactType === "Sitio Web" && (
+                  <a
+                    href={empresa.contactLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline text-sm"
+                  >
+                    Ir al sitio
+                  </a>
+                )}
+
+                {empresa.contactType === "Instagram" && (
+                  <a
+                    href={empresa.contactLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline text-sm"
+                  >
+                    Instagram
+                  </a>
+                )}
+
+                {empresa.address && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    {empresa.address}
+                  </p>
+                )}
               </div>
             </div>
+
+            {empresa.address && (
+              <div className="mt-6">
+                <h4 className="text-md font-medium text-gray-600 mb-2">Ubicación</h4>
+                <iframe
+                  title="Mapa de ubicación"
+                  width="100%"
+                  height="300"
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="rounded-lg border"
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(
+                    empresa.address
+                  )}&output=embed`}
+                ></iframe>
+              </div>
+            )}
           </div>
         </div>
-
-        <div className="mt-10">{children}</div>
       </div>
     </div>
   );
