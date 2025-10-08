@@ -57,7 +57,13 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
       <a href={contactLink} className="text-indigo-600 mt-2 hover:underline">
         Sitio Web / Instagram
       </a>
-      <a  href={`https://wa.me/${phone}`} className="text-sm text-gray-600 mt-2">Whatsapp</a>
+      <a
+  href={`https://wa.me/${phone}?text=${encodeURIComponent('Hola! Vengo desde la Comunidad de B&A, me gustaría estar en contacto con ustedes.')}`}
+  className="text-sm text-gray-600 mt-2"
+>
+  Whatsapp
+</a>
+
     </div>
   );
 }
