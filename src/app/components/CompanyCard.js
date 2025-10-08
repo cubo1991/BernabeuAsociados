@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 
 
-export default function CompanyCard({ companyName, id, logoUrl, benefit, benefitType, phone, contactLink, description }) {
+export default function CompanyCard({ companyName, id, logoUrl, benefit, benefitType, phone, contactLink, description, contactType }) {
   const ref = useRef();
   const [visible, setVisible] = useState(false);
 
@@ -54,9 +54,11 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
 </Link>
 
       <p className="text-sm text-gray-600">{description}</p>
-      <a href={contactLink} className="text-indigo-600 mt-2 hover:underline">
-        Sitio Web / Instagram
-      </a>
+     {(contactType === 'Instagram' || contactType === 'Sitio Web') && (
+  <a href={contactLink} className="text-indigo-600 mt-2 hover:underline">
+    {contactType}
+  </a>
+)}
       <a
   href={`https://wa.me/${phone}?text=${encodeURIComponent('Hola! Vengo desde la Comunidad de B&A, me gustaría estar en contacto con ustedes.')}`}
   className="text-sm text-gray-600 mt-2"

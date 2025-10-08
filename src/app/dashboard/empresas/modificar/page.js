@@ -12,6 +12,7 @@ export default function ModificarEmpresaPage() {
     phone: "",
     logoUrl: "",
     contactLink: "",
+    contactType: "", // 👈 nuevo campo
     benefitType: "",
     benefit: "",
     description: "",
@@ -24,7 +25,7 @@ export default function ModificarEmpresaPage() {
       const snapshot = await getDocs(collection(db, "empresas"));
       setEmpresas(
         snapshot.docs.map(docSnap => ({
-          firestoreId: docSnap.id, // ID real del documento
+          firestoreId: docSnap.id,
           ...docSnap.data()
         }))
       );
@@ -42,6 +43,7 @@ export default function ModificarEmpresaPage() {
           phone: empresa.phone || "",
           logoUrl: empresa.logoUrl || "",
           contactLink: empresa.contactLink || "",
+          contactType: empresa.contactType || "", 
           benefitType: empresa.benefitType || "",
           benefit: empresa.benefit || "",
           description: empresa.description || "",
@@ -129,6 +131,20 @@ export default function ModificarEmpresaPage() {
             required
             className="input"
           />
+
+   
+          <select
+            name="contactType"
+            value={form.contactType}
+            onChange={handleChange}
+            required
+            className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Tipo de contacto</option>
+            <option value="Instagram">Instagram</option>
+            <option value="Sitio Web">Sitio Web</option>
+          </select>
+
           <select
             name="benefitType"
             value={form.benefitType}

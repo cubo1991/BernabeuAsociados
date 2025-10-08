@@ -11,6 +11,7 @@ export default function AgregarEmpresa() {
     phone: "",
     logoUrl: "",
     contactLink: "",
+    contactType: "", 
     benefitType: "",
     description: "",
     benefit: "",
@@ -38,6 +39,7 @@ export default function AgregarEmpresa() {
         phone: "",
         logoUrl: "",
         contactLink: "",
+        contactType: "",
         benefitType: "",
         description: "",
         benefit: "",
@@ -88,6 +90,20 @@ export default function AgregarEmpresa() {
           required
           className="input"
         />
+
+   
+        <select
+          name="contactType"
+          value={form.contactType}
+          onChange={handleChange}
+          required
+          className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Tipo de contacto</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Sitio Web">Sitio Web</option>
+        </select>
+
         <select
           name="benefitType"
           value={form.benefitType}
