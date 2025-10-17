@@ -66,6 +66,9 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
   Whatsapp
 </a>
 
+
+
+
     </div>
   );
 }
