@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../lib/firebase";
+import UploadToCloudinary from "@/app/components/UploadToCloudinary";
 
 export default function ModificarEmpresaPage() {
   const [empresas, setEmpresas] = useState([]);
@@ -12,7 +13,7 @@ export default function ModificarEmpresaPage() {
     phone: "",
     logoUrl: "",
     contactLink: "",
-    contactType: "", // 👈 nuevo campo
+    contactType: "",
     benefitType: "",
     benefit: "",
     description: "",
@@ -43,7 +44,7 @@ export default function ModificarEmpresaPage() {
           phone: empresa.phone || "",
           logoUrl: empresa.logoUrl || "",
           contactLink: empresa.contactLink || "",
-          contactType: empresa.contactType || "", 
+          contactType: empresa.contactType || "",
           benefitType: empresa.benefitType || "",
           benefit: empresa.benefit || "",
           description: empresa.description || "",
@@ -55,6 +56,10 @@ export default function ModificarEmpresaPage() {
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleImageUpload = (url) => {
+    setForm(prev => ({ ...prev, logoUrl: url }));
   };
 
   const handleSubmit = async e => {
@@ -91,95 +96,35 @@ export default function ModificarEmpresaPage() {
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-lg shadow-md"
         >
-          <input
-            name="companyName"
-            placeholder="Nombre de la empresa"
-            value={form.companyName}
-            onChange={handleChange}
-            required
-            className="input"
-          />
-          <input
-            name="ownerName"
-            placeholder="Nombre del dueño"
-            value={form.ownerName}
-            onChange={handleChange}
-            required
-            className="input"
-          />
-          <input
-            name="phone"
-            placeholder="Teléfono"
-            value={form.phone}
-            onChange={handleChange}
-            required
-            className="input"
-          />
-          <input
-            name="logoUrl"
-            placeholder="Logo URL"
-            value={form.logoUrl}
-            onChange={handleChange}
-            required
-            className="input"
-          />
-          <input
-            name="contactLink"
-            placeholder="Link de contacto"
-            value={form.contactLink}
-            onChange={handleChange}
-            required
-            className="input"
-          />
-
-   
-          <select
-            name="contactType"
-            value={form.contactType}
-            onChange={handleChange}
-            required
-            className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
+          <input name="companyName" placeholder="Nombre de la empresa" value={form.companyName} onChange={handleChange} required className="input" />
+          <input name="ownerName" placeholder="Nombre del dueño" value={form.ownerName} onChange={handleChange} required className="input" />
+          <input name="phone" placeholder="Teléfono" value={form.phone} onChange={handleChange} required className="input" />
+          <input name="contactLink" placeholder="Link de contacto" value={form.contactLink} onChange={handleChange} required className="input" />
+          <select name="contactType" value={form.contactType} onChange={handleChange} required className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="">Tipo de contacto</option>
             <option value="Instagram">Instagram</option>
             <option value="Sitio Web">Sitio Web</option>
           </select>
-
-          <select
-            name="benefitType"
-            value={form.benefitType}
-            onChange={handleChange}
-            required
-            className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
+          <select name="benefitType" value={form.benefitType} onChange={handleChange} required className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <option value="">Tipo de beneficio</option>
             <option value="Texto">Texto</option>
             <option value="Descuento">Descuento</option>
           </select>
-          <input
-            name="benefit"
-            placeholder="Beneficio"
-            value={form.benefit}
-            onChange={handleChange}
-            required
-            className="input"
-          />
-          <input
-            name="description"
-            placeholder="Descripción corta"
-            value={form.description}
-            onChange={handleChange}
-            required
-            className="input"
-          />
-          <textarea
-            name="fullDescription"
-            placeholder="Descripción completa"
-            value={form.fullDescription}
-            onChange={handleChange}
-            required
-            className="input col-span-1 md:col-span-2 h-32 resize-none"
-          />
+          <input name="benefit" placeholder="Beneficio" value={form.benefit} onChange={handleChange} required className="input" />
+          <input name="description" placeholder="Descripción corta" value={form.description} onChange={handleChange} required className="input" />
+          <textarea name="fullDescription" placeholder="Descripción completa" value={form.fullDescription} onChange={handleChange} required className="input col-span-1 md:col-span-2 h-32 resize-none" />
+
+          {/* Subida de imagen */}
+          <div className="col-span-1 md:col-span-2 space-y-4">
+            <UploadToCloudinary onUpload={handleImageUpload} />
+            {form.logoUrl && (
+              <div className="mt-4 p-4 border rounded-md bg-gray-50">
+                <p className="text-sm text-gray-600 mb-2">Logo actual:</p>
+                <img src={form.logoUrl} alt="Logo preview" className="w-32 h-32 object-cover rounded-md shadow" />
+              </div>
+            )}
+          </div>
+
           <button
             type="submit"
             disabled={loading}

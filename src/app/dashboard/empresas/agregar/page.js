@@ -11,7 +11,7 @@ export default function AgregarEmpresa() {
     phone: "",
     logoUrl: "",
     contactLink: "",
-    contactType: "", 
+    contactType: "",
     benefitType: "",
     description: "",
     benefit: "",
@@ -90,8 +90,6 @@ export default function AgregarEmpresa() {
           required
           className="input"
         />
-
-   
         <select
           name="contactType"
           value={form.contactType}
@@ -103,7 +101,6 @@ export default function AgregarEmpresa() {
           <option value="Instagram">Instagram</option>
           <option value="Sitio Web">Sitio Web</option>
         </select>
-
         <select
           name="benefitType"
           value={form.benefitType}
@@ -144,8 +141,8 @@ export default function AgregarEmpresa() {
         <div className="col-span-1 md:col-span-2 space-y-4">
           <UploadToCloudinary onUpload={handleImageUpload} />
           {form.logoUrl && (
-            <div className="mt-2">
-              <p className="text-sm text-gray-600">Logo cargado:</p>
+            <div className="mt-4 p-4 border rounded-md bg-gray-50">
+              <p className="text-sm text-gray-600 mb-2">Logo cargado:</p>
               <img
                 src={form.logoUrl}
                 alt="Logo preview"

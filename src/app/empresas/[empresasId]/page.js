@@ -2,6 +2,35 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 
 
+/**
+ * Layout de página para una empresa que obtiene datos desde Firestore y renderiza la UI correspondiente.
+ *
+ * Esta función es asíncrona porque consulta un documento en Cloud Firestore usando el id pasado
+ * en params.empresasId. Si el documento no existe, renderiza un mensaje indicando que la empresa no fue encontrada.
+ *
+ * @async
+ * @function EmpresasLayout
+ * @param {Object} props - Props entrantes del layout.
+ * @param {Object} props.params - Parámetros de ruta provistos por Next.js.
+ * @param {string} props.params.empresasId - ID del documento de la empresa en la colección "empresas".
+ * @param {import('react').ReactNode} props.children - Contenido hijo que se renderiza dentro del layout.
+ * @returns {Promise<import('react').ReactElement>} Elemento React que contiene la UI del layout de la empresa.
+ *
+ * @remarks
+ * - Se espera que el documento de Firestore contenga las siguientes propiedades (al menos):
+ *   - logoUrl: string
+ *   - companyName: string
+ *   - ownerName: string
+ *   - fullDescription: string
+ *   - benefit: string
+ *   - benefitType: string
+ *   - phone: string
+ *   - contactLink: string (URL)
+ * - Maneja explícitamente el caso en que el documento no existe mostrando un mensaje de error en la UI.
+ * - Se asume que en el ámbito están disponibles las utilidades de Firestore (por ejemplo `db`, `doc`, `getDoc`).
+ *
+ * @throws {Error} Si la consulta a Firestore falla, la excepción subyacente se propagará (no se captura aquí).
+ */
 export default async function EmpresasLayout({ params, children }) {
   const docRef = doc(db, "empresas", params.empresasId);
   const docSnap = await getDoc(docRef);

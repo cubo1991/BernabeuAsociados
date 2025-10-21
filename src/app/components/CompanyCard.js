@@ -29,12 +29,14 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
       }`}
     >
-        {benefitType === 'Descuento' ? (
-      // <BenefitBadge text={benefit} />
-      <BenefitRibbon text={benefit} />
-    ) : (
-      <BenefitRibbon text={benefit} />
-    )}
+      {benefit && benefit.trim() && (
+        benefitType === 'Descuento' ? (
+          // <BenefitBadge text={benefit} />
+          <BenefitRibbon text={benefit} />
+        ) : (
+          <BenefitRibbon text={benefit} />
+        )
+      )}
 
       {/* Logo */}
       <div className="w-50 h-50 mb-3 relative">
@@ -48,27 +50,23 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
 
       {/* Info */}
       <Link href={`/empresas/${id}`}>
-  <h2 className="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors duration-200 underline-offset-2 hover:underline">
-    {companyName}
-  </h2>
-</Link>
+        <h2 className="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors duration-200 underline-offset-2 hover:underline">
+          {companyName}
+        </h2>
+      </Link>
 
       <p className="text-sm text-gray-600">{description}</p>
-     {(contactType === 'Instagram' || contactType === 'Sitio Web') && (
-  <a href={contactLink} className="text-indigo-600 mt-2 hover:underline">
-    {contactType}
-  </a>
-)}
+      {(contactType === 'Instagram' || contactType === 'Sitio Web') && (
+        <a href={contactLink} className="text-indigo-600 mt-2 hover:underline">
+          {contactType}
+        </a>
+      )}
       <a
-  href={`https://wa.me/${phone}?text=${encodeURIComponent('Hola! Vengo desde la Comunidad de B&A, me gustaría estar en contacto con ustedes.')}`}
-  className="text-sm text-gray-600 mt-2"
->
-  Whatsapp
-</a>
-
-
-
-
+        href={`https://wa.me/${phone}?text=${encodeURIComponent('Hola! Vengo desde la Comunidad de B&A, me gustaría estar en contacto con ustedes.')}`}
+        className="text-sm text-gray-600 mt-2"
+      >
+        Whatsapp
+      </a>
     </div>
   );
 }
