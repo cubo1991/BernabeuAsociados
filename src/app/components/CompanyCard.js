@@ -9,6 +9,7 @@ import Link from 'next/link';
 
 
 
+
 export default function CompanyCard({ companyName, id, logoUrl, benefit, benefitType, phone, contactLink, description, contactType }) {
   const ref = useRef();
   const [visible, setVisible] = useState(false);
@@ -44,7 +45,7 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
           src={logoUrl}
           alt={`Logo de ${companyName}`}
           fill
-          className="object-contain rounded-lg logo-hover border-2 border-gray-200"
+          className="object-contain rounded-lg logo-hover border-2 "
         />
       </div>
 

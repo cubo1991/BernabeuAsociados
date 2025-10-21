@@ -1,4 +1,7 @@
 "use client";
+import pedroFoto from '../../../public/pedro.jpg';
+import goyoFoto from '../../../public/goyo.jpg';
+import Image from 'next/image';
 
 export default function NosotrosPage() {
   return (
@@ -26,14 +29,14 @@ export default function NosotrosPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
           {[
             {
-              name: "Lucía Fernández",
-              role: "Directora de Estrategia",
-              image: "https://placehold.co/300x300?text=Lucía",
+              name: "Pedro J. Bernabeu",
+              role: "Director",
+              image: pedroFoto,
             },
             {
-              name: "Martín López",
-              role: "Líder de Desarrollo",
-              image: "https://placehold.co/300x300?text=Martín",
+              name: "Gregorio Lazarte",
+              role: "Soporte Administrativo",
+              image: goyoFoto,
             },
             {
               name: "Sofía Ramírez",
@@ -47,11 +50,14 @@ export default function NosotrosPage() {
             },
           ].map(({ name, role, image }) => (
             <div key={name} className="flex flex-col items-center text-center">
-              <img
-                src={image}
-                alt={name}
-                className="w-40 h-40 rounded-full object-cover mb-4 shadow-md"
-              />
+              <Image
+              src={image}
+              alt={name + ", " + role}
+              width={160}
+              height={160}
+              className="w-40 h-40 rounded-full object-cover mb-4 shadow-md"
+/>
+
               <h3 className="text-xl font-semibold">{name}</h3>
               <p className="text-gray-600">{role}</p>
             </div>
