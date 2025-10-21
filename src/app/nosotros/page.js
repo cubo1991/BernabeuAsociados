@@ -6,25 +6,20 @@ export default function NosotrosPage() {
       <h1 className="text-4xl font-bold mb-8 text-center text-gray-900">Sobre Nosotros</h1>
 
       <div className="space-y-6 max-w-3xl mx-auto text-lg leading-relaxed">
-        <p>
-          En Bernabeu & Asociados, creemos que la innovación nace del compromiso con las personas. Desde nuestros inicios, nos propusimos transformar la manera en que las empresas se conectan con sus clientes.
-        </p>
-        <p>
-          Nuestra historia comenzó en Mendoza, con un pequeño equipo apasionado por la tecnología y el diseño. Hoy, somos una firma reconocida por su enfoque humano y estratégico.
-        </p>
-        <p>
-          Nos especializamos en soluciones digitales que combinan funcionalidad, estética y escalabilidad. Cada proyecto es una oportunidad para construir algo que perdure.
-        </p>
-        <p>
-          Valoramos la transparencia, la colaboración y el aprendizaje continuo. Nuestro equipo trabaja codo a codo con cada cliente, entendiendo sus desafíos y celebrando sus logros.
-        </p>
-        <p>
-          Más allá de los resultados, nos importa el impacto. Queremos que nuestras soluciones generen valor real, tanto para las empresas como para las comunidades que las rodean.
-        </p>
-        <p>
-          Si estás buscando un socio estratégico que combine visión, técnica y compromiso, estás en el lugar correcto. Bienvenido a Bernabeu Asociados.
-        </p>
-      </div>
+  <p>
+    Somos un equipo de jóvenes profesionales con una mirada fresca y actual sobre los desafíos que enfrentan las pymes y las empresas familiares.
+  </p>
+  <p>
+    Nuestro propósito es claro: ayudarte a ordenar y fortalecer la administración, las finanzas y la contabilidad de tu negocio, para que puedas tomar decisiones inteligentes, con mayor claridad y tranquilidad.
+  </p>
+  <p>
+    Sabemos lo que significa estar al frente de una empresa y entendemos que, muchas veces, el día a día no deja espacio para poner en orden lo importante.
+  </p>
+  <p>
+    Por eso estamos acá: para acompañarte con herramientas prácticas, compromiso real y una visión estratégica pensada para crecer juntos.
+  </p>
+</div>
+
 
       <div className="mt-16">
         <h2 className="text-2xl font-semibold mb-6 text-center">Nuestro Equipo</h2>

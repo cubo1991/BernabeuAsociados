@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Comunidad B&A",
-  description: "Comunidad B&A",
+  description: "Comunidad B&A: la comunidad de empresarios mendocinos",
    icons: {
     icon: '/favicon.ico', 
   },

@@ -48,7 +48,7 @@ export default function EmpresasPage() {
 
   return (
     <main className="p-6">
-      <h1 className="h1Oscuro text-2xl font-bold mb-4">Comunidad B&A</h1>
+      <h1 className="h1Oscuro text-l font-bold mb-4">Comunidad B&A: la comunidad de empresarios mendocinos</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {companies.map((company) => (
           <CompanyCard key={company.id} {...company} />
