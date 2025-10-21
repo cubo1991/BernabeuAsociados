@@ -16,6 +16,7 @@ export default function AgregarEmpresa() {
     description: "",
     benefit: "",
     fullDescription: "",
+    address: "", 
   });
   const [mensaje, setMensaje] = useState("");
 
@@ -44,6 +45,7 @@ export default function AgregarEmpresa() {
         description: "",
         benefit: "",
         fullDescription: "",
+        address: "",
       });
     } catch {
       setMensaje("❌ Error al agregar la empresa.");
@@ -128,6 +130,14 @@ export default function AgregarEmpresa() {
           required
           className="input"
         />
+             {/* 🏠 Campo opcional: Domicilio */}
+        <input
+          name="address"
+          placeholder="Domicilio (opcional)"
+          value={form.address}
+          onChange={handleChange}
+          className="input col-span-1 md:col-span-2"
+        />
         <textarea
           name="fullDescription"
           placeholder="Descripción completa"
@@ -135,7 +145,9 @@ export default function AgregarEmpresa() {
           onChange={handleChange}
           required
           className="input col-span-1 md:col-span-2 h-32 resize-none"
+   
         />
+
 
         {/* Subida de imagen */}
         <div className="col-span-1 md:col-span-2 space-y-4">

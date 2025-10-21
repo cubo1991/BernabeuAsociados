@@ -21,7 +21,7 @@ export const metadata = {
   title: "Comunidad B&A",
   description: "Comunidad B&A",
    icons: {
-    icon: '/favicon.ico', // Ruta al ícono
+    icon: '/favicon.ico', 
   },
 };
 
