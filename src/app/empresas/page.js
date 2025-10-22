@@ -41,7 +41,7 @@ export default function EmpresasPage() {
     const fetchCompanies = async () => {
       const data = await getEmpresas();
       setCompanies(data);
-    };
+    };               
 
     fetchCompanies();
   }, []);
