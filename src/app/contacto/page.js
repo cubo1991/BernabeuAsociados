@@ -14,8 +14,8 @@ export default function ContactoPage() {
           <div>
             <h2 className="text-xl font-semibold text-gray-700">📧 Correo electrónico</h2>
             <p className="text-gray-600">
-              <a href="mailto:contacto@bernabeuasociados.com" className="text-blue-600 hover:underline">
-                contacto@bernabeuasociados.com
+              <a href="mailto:bernabeuasociados@gmail.com" className="text-blue-600 hover:underline">
+                bernabeuasociados@gmail.com
               </a>
             </p>
           </div>
@@ -24,19 +24,20 @@ export default function ContactoPage() {
             <h2 className="text-xl font-semibold text-gray-700">📱 WhatsApp</h2>
             <p className="text-gray-600">
               <a
-                href="https://wa.me/5492611234567"
+                href={`https://wa.me/5491153243493?text=${encodeURIComponent('¡Hola! Vengo desde la Comunidad de B&A, me gustaría estar en contacto con ustedes.')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-green-600 hover:underline"
+             
               >
-                +54 9 261 123-4567
+                +54 9 11 5324-3493
               </a>
             </p>
           </div>
         </div>
 
         <p className="text-gray-500 text-sm text-center pt-6">
-          Respondemos de lunes a viernes, de 9:00 a 18:00 hs (ART).
+          Podés escribirnos los 365 días del año, las 24 horas.
         </p>
       </div>
     </main>
