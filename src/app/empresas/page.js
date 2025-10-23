@@ -63,7 +63,7 @@ export default function EmpresasPage() {
       </div>
 
       <div className="h-6">
-        {loading && <p className="text-sm">{searching ? 'Buscando empresa...' : 'Cargando empresas...'}</p>}
+        {loading && <p className="text-sm">{searching ? 'Buscando empresa...' : ''}</p>}
         {error && <p className="text-red-600 text-sm">Error al cargar empresas.</p>}
       </div>
 
