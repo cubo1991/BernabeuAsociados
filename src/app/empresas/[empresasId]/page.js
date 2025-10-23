@@ -1,17 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 
 export default function Page({ params }) {
+  const { empresasId } = params ?? {};
   const [empresa, setEmpresa] = useState(null);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    const fetchEmpresa = async () => {
+    const fetchData = async () => {
       try {
-        const docRef = doc(db, "empresas", params.empresasId);
+        const docRef = doc(db, "empresas", empresasId);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
@@ -25,27 +26,23 @@ export default function Page({ params }) {
       }
     };
 
-    fetchEmpresa();
-  }, [params.empresasId]);
+    if (empresasId) fetchData();
+  }, [empresasId]);
 
   if (notFound) {
     return (
-      <div className="p-10 text-center text-red-600">
-        Empresa no encontrada.
-      </div>
+      <div className="p-10 text-center text-red-600">Empresa no encontrada.</div>
     );
   }
 
   if (!empresa) {
     return (
-      <div className="p-10 text-center text-gray-500">
-        Cargando empresa...
-      </div>
+      <div className="p-10 text-center text-gray-500">Cargando empresa...</div>
     );
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen relative">
       <div className="max-w-4xl mx-auto py-8">
         <div className="bg-white rounded-xl shadow-md p-6 mt-6">
           <div className="flex items-center gap-4">
@@ -102,9 +99,7 @@ export default function Page({ params }) {
                 )}
 
                 {empresa.address && (
-                  <p className="text-sm text-gray-500 mt-2">
-                    {empresa.address}
-                  </p>
+                  <p className="text-sm text-gray-500 mt-2">{empresa.address}</p>
                 )}
               </div>
             </div>

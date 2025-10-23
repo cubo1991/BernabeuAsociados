@@ -46,3 +46,9 @@ export const deleteEmpresa = async (id) => {
   const ref = doc(db, COLLECTION_NAME, id.toString());
   await deleteDoc(ref);
 };
+
+export const getEmpresasOrdered = async () => {
+  const q = query(collection(db, COLLECTION_NAME), orderBy("companyName")); // o "createdAt"
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};

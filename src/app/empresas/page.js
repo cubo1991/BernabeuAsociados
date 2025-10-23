@@ -52,7 +52,7 @@ export default function EmpresasPage() {
           Comunidad B&A: la comunidad de empresarios mendocinos
         </h1>
 
-        <div className="w-40 sm:w-2/3 md:w-1/2 lg:w-1/3 self-center">
+        <div className="w-40 sm:w-2/3 md:w-1/2 lg:w-1/3 self-center animate-fade-slide-up min-h-[36px]">
           <EmpresaSearchBar
             onResults={setCompanies}
             onLoading={setLoading}
@@ -62,7 +62,7 @@ export default function EmpresasPage() {
         </div>
       </div>
 
-      <div className="h-6">
+      <div className="h-6 truncate animate-fade-slide-up">
         {loading && <p className="text-sm">{searching ? 'Buscando empresa...' : ''}</p>}
         {error && <p className="text-red-600 text-sm">Error al cargar empresas.</p>}
       </div>

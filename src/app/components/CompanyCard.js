@@ -41,12 +41,14 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
 
       {/* Logo */}
       <div className="logo-container w-50 h-50 mb-3 relative">
+              <Link href={`/empresas/${id}`}>
         <Image
           src={logoUrl}
           alt={`Logo de ${companyName}`}
           fill
           className="object-contain rounded-lg logo-hover border-2 "
         />
+      </Link>
       </div>
 
       {/* Info */}
