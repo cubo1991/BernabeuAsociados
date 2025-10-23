@@ -121,3 +121,7 @@ body {
 .animate-fade-slide-up {
   animation: fadeSlideUp 0.8s ease-out both;
 }
+
+.transicionApertura{
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}

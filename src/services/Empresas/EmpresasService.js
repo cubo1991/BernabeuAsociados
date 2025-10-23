@@ -1,5 +1,5 @@
 // src/services/empresaService.js
-import { collection, doc, getDocs, getDoc, setDoc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, getDoc, setDoc, updateDoc, deleteDoc, query, orderBy, startAt, endAt } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 
 
@@ -9,6 +9,22 @@ export const getEmpresas = async () => {
   const snapshot = await getDocs(collection(db, COLLECTION_NAME));
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 };
+
+export const getEmpresaByName = async (name) => {
+  const snapshot = await getDocs(collection(db, COLLECTION_NAME));
+  const empresas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+  const lowerName = name.trim().toLowerCase();
+
+
+  if (lowerName.length < 2) return [];
+
+  return empresas.filter(empresa =>
+    typeof empresa.companyName === 'string' &&
+    empresa.companyName.toLowerCase().includes(lowerName)
+  );
+};
+
 
 export const getEmpresaById = async (id) => {
   const ref = doc(db, COLLECTION_NAME, id.toString());
