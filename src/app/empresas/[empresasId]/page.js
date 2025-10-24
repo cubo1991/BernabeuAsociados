@@ -37,7 +37,7 @@ export default function Page({ params }) {
 
   if (!empresa) {
     return (
-      <div className="p-10 text-center text-gray-500">Cargando empresa...</div>
+      <div className="p-10 text-center text-gray-500"></div>
     );
   }
 
