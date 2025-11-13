@@ -1,6 +1,7 @@
 "use client";
 import pedroFoto from '../../../public/pedro.jpg';
 import goyoFoto from '../../../public/goyo.jpg';
+import davidFoto from '../../../public/david.jpg';
 import Image from 'next/image';
 
 export default function NosotrosPage() {
@@ -26,43 +27,57 @@ export default function NosotrosPage() {
 
       <div className="mt-16">
         <h2 className="text-2xl font-semibold mb-6 text-center">Nuestro Equipo</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
-          {[
-            {
-              name: "Pedro J. Bernabeu",
-              role: "Director",
-              image: pedroFoto,
-            },
-            {
-              name: "Gregorio Lazarte",
-              role: "Soporte Administrativo",
-              image: goyoFoto,
-            },
-            {
-              name: "Sofía Ramírez",
-              role: "Diseñadora UX/UI",
-              image: "https://placehold.co/300x300?text=Sofía",
-            },
-            {
-              name: "Julián Torres",
-              role: "Especialista en Marketing",
-              image: "https://placehold.co/300x300?text=Julián",
-            },
-          ].map(({ name, role, image }) => (
-            <div key={name} className="flex flex-col items-center text-center">
-              <Image
-              src={image}
-              alt={name + ", " + role}
-              width={160}
-              height={160}
-              className="w-40 h-40 rounded-full object-cover mb-4 shadow-md"
-/>
+   <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+  {[
+    {
+      name: "Pedro J. Bernabeu",
+      role: "Director",
+      image: pedroFoto,
+    },
+    {
+      name: "Gregorio Lazarte",
+      role: "Soporte Administrativo",
+      image: goyoFoto,
+    },
+    {
+      name: "Sofía Ramírez",
+      role: "Diseñadora UX/UI",
+      image: "https://placehold.co/300x300?text=Sofía",
+    },
+    {
+      name: "Julián Torres",
+      role: "Especialista en Marketing",
+      image: "https://placehold.co/300x300?text=Julián",
+    },
+    {
+      name: "David Lopez",
+      role: "Desarrollador Web",
+      image: davidFoto,
+    }
+  ].map(({ name, role, image }, index, arr) => {
+    const isLast = index === arr.length - 1;
+    const isOdd = arr.length % 2 !== 0;
 
-              <h3 className="text-xl font-semibold">{name}</h3>
-              <p className="text-gray-600">{role}</p>
-            </div>
-          ))}
-        </div>
+    return (
+      <div
+        key={name}
+        className={`flex flex-col items-center text-center 
+          ${isLast && isOdd ? "md:col-span-2 md:justify-self-center" : ""}`}
+      >
+        <Image
+          src={image}
+          alt={name + ", " + role}
+          width={160}
+          height={160}
+          className="w-40 h-40 rounded-full object-cover mb-4 shadow-md"
+        />
+        <h3 className="text-xl font-semibold">{name}</h3>
+        <p className="text-gray-600">{role}</p>
+      </div>
+    );
+  })}
+</div>
+
       </div>
     </main>
   );
