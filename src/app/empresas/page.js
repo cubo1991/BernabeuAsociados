@@ -45,22 +45,21 @@ export default function EmpresasPage() {
   return (
     <main className="px-4 pt-2 pb-2">
       {/* Header: título */}
-      <div className="flex items-center gap-3 flex-nowrap">
-        <h1 className="h1Oscuro text-sm md:text-lg font-bold m-0 min-h-[36px] max-w-[60%] truncate animate-fade-slide-up">
-          Comunidad B&A: la comunidad de empresarios mendocinos
-        </h1>
+      <div className="flex items-center gap-3 flex-wrap">
+   
+   
       </div>
 
-      <div className="h-6 truncate animate-fade-slide-up">
+      <div className="h-auto md:h-6 truncate animate-fade-slide-up">
         {loading && <p className="text-sm"></p>}
         {error && <p className="text-red-600 text-sm">Error al cargar empresas.</p>}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {companies.map((company) => (
           <CompanyCard key={company.id} {...company} />
         ))}
       </div>
-    </main>
+    </main> 
   );
 }

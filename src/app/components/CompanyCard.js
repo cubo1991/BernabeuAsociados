@@ -26,9 +26,9 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
   return (
     <div
       ref={ref}
-      className={`relative bg-white rounded-lg shadow-md border p-4 flex flex-col items-center text-center transition-all duration-700 ease-out transform ${
+      className={`relative bg-white rounded-lg shadow-md p-4 flex flex-col items-center text-center transition-all duration-700 ease-out transform ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-      }`}
+      } aspect-square md:aspect-auto`}
     >
       {benefit && benefit.trim() && (
         benefitType === 'Descuento' ? (
@@ -40,36 +40,38 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
       )}
 
       {/* Logo */}
-      <div className="logo-container w-50 h-50 mb-3 relative">
-              <Link href={`/empresas/${id}`}>
-        <Image
-          src={logoUrl}
-          alt={`Logo de ${companyName}`}
-          fill
-          className="object-contain rounded-lg logo-hover border-2 "
-        />
-      </Link>
+      <div className="logo-container w-full h-32 md:w-50 md:h-50 mb-3 relative flex-shrink-0">
+        <Link href={`/empresas/${id}`}>
+          <Image
+            src={logoUrl}
+            alt={`Logo de ${companyName}`}
+            fill
+            className="object-contain rounded-lg logo-hover border-2"
+          />
+        </Link>
       </div>
 
       {/* Info */}
-      <Link href={`/empresas/${id}`}>
-        <h2 className="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors duration-200 underline-offset-2 hover:underline">
-          {companyName}
-        </h2>
-      </Link>
+      <div className="flex-grow flex flex-col justify-center overflow-hidden">
+        <Link href={`/empresas/${id}`}>
+          <h2 className="text-xl font-bold text-black hover:text-indigo-800 transition-colors duration-200 underline-offset-2 hover:underline line-clamp-2">
+            {companyName}
+          </h2>
+        </Link>
 
-      <p className="text-sm text-gray-600">{description}</p>
-      {(contactType === 'Instagram' || contactType === 'Sitio Web') && (
-        <a href={contactLink} className="text-indigo-600 mt-2 hover:underline">
-          {contactType}
+        <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
+        {(contactType === 'Instagram' || contactType === 'Sitio Web') && (
+          <a href={contactLink} className="text-indigo-600 mt-2 hover:underline text-sm">
+            {contactType}
+          </a>
+        )}
+        <a
+          href={`https://wa.me/${phone}?text=${encodeURIComponent('Hola! Vengo desde la Comunidad de B&A, me gustaría estar en contacto con ustedes.')}`}
+          className="text-sm text-gray-600 mt-2"
+        >
+          Whatsapp
         </a>
-      )}
-      <a
-        href={`https://wa.me/${phone}?text=${encodeURIComponent('Hola! Vengo desde la Comunidad de B&A, me gustaría estar en contacto con ustedes.')}`}
-        className="text-sm text-gray-600 mt-2"
-      >
-        Whatsapp
-      </a>
+      </div>
     </div>
   );
 }
