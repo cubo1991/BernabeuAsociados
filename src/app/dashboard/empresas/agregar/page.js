@@ -65,7 +65,6 @@ export default function AgregarEmpresa() {
           placeholder="Nombre de la empresa"
           value={form.companyName}
           onChange={handleChange}
-          required
           className="input"
         />
         <input
@@ -73,7 +72,6 @@ export default function AgregarEmpresa() {
           placeholder="Nombre del dueño"
           value={form.ownerName}
           onChange={handleChange}
-          required
           className="input"
         />
         <input
@@ -81,7 +79,6 @@ export default function AgregarEmpresa() {
           placeholder="Teléfono"
           value={form.phone}
           onChange={handleChange}
-          required
           className="input"
         />
         <input
@@ -89,14 +86,12 @@ export default function AgregarEmpresa() {
           placeholder="Link de contacto"
           value={form.contactLink}
           onChange={handleChange}
-          required
           className="input"
         />
         <select
           name="contactType"
           value={form.contactType}
           onChange={handleChange}
-          required
           className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Tipo de contacto</option>
@@ -107,7 +102,6 @@ export default function AgregarEmpresa() {
           name="benefitType"
           value={form.benefitType}
           onChange={handleChange}
-          required
           className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Seleccionar tipo de beneficio</option>
@@ -119,7 +113,6 @@ export default function AgregarEmpresa() {
           placeholder="Descripción corta"
           value={form.description}
           onChange={handleChange}
-          required
           className="input"
         />
         <input
@@ -127,10 +120,8 @@ export default function AgregarEmpresa() {
           placeholder="Beneficio"
           value={form.benefit}
           onChange={handleChange}
-          required
           className="input"
         />
-             {/* 🏠 Campo opcional: Domicilio */}
         <input
           name="address"
           placeholder="Domicilio (opcional)"
@@ -143,13 +134,9 @@ export default function AgregarEmpresa() {
           placeholder="Descripción completa"
           value={form.fullDescription}
           onChange={handleChange}
-          required
           className="input col-span-1 md:col-span-2 h-32 resize-none"
-   
         />
 
-
-        {/* Subida de imagen */}
         <div className="col-span-1 md:col-span-2 space-y-4">
           <UploadToCloudinary onUpload={handleImageUpload} />
           {form.logoUrl && (

@@ -30,14 +30,7 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
       } aspect-square md:aspect-auto`}
     >
-      {benefit && benefit.trim() && (
-        benefitType === 'Descuento' ? (
-          // <BenefitBadge text={benefit} />
-          <BenefitRibbon text={benefit} />
-        ) : (
-          <BenefitRibbon text={benefit} />
-        )
-      )}
+ 
 
       {/* Logo */}
       <div className="logo-container w-full h-32 md:w-50 md:h-50 mb-3 relative flex-shrink-0">
