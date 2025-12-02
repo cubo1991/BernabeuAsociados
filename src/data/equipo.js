@@ -3,7 +3,7 @@ import goyoFoto from '../../public/goyo.jpg';
 import davidFoto from '../../public/david.jpg';
 import pabloFoto from '../../public/pablo.jpg';
 import juanmaFoto from '../../public/Juanma.jpg';
-
+import facuFoto from '../../public/Facundo.jpg';
 const equipo = [
   {
     name: "Pedro J. Bernabeu",  
@@ -24,6 +24,11 @@ const equipo = [
     name: "Juan Manuel Gómez",
     role: "Contable",
     image: juanmaFoto,
+    },
+      {
+    name: "Facundo Plaza",
+    role: "Ejecutivo de Cuentas",
+    image: facuFoto,
     },
     {
     name: "David Lopez",
