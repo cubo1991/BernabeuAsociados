@@ -28,7 +28,7 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
       ref={ref}
       className={`relative bg-white rounded-lg shadow-md p-4 flex flex-col items-center text-center transition-all duration-700 ease-out transform ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-      } aspect-square md:aspect-auto`}
+      }  md:aspect-auto`}
     >
  
 
