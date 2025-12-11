@@ -4,6 +4,10 @@ import Image from 'next/image';
 import BenefitBadge from './BenefitBadtge';
 import BenefitRibbon from './BenefitRibbon';
 import Link from 'next/link';
+import { MoveRight } from "lucide-react";
+
+
+
 
 
 
@@ -52,8 +56,10 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
           </h2>
         </Link>
 
-        <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
-        {(contactType === 'Instagram' || contactType === 'Sitio Web') && (
+
+
+         <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
+        {/*{(contactType === 'Instagram' || contactType === 'Sitio Web') && (
           <a href={contactLink} className="text-indigo-600 mt-2 hover:underline text-sm">
             {contactType}
           </a>
@@ -63,7 +69,16 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
           className="text-sm text-gray-600 mt-2"
         >
           Whatsapp
-        </a>
+        </a> */}
+      <Link href={`/empresas/${id}`} className="mt-2 text-indigo-600 hover:underline text-sm">
+       <div className="flex items-center justify-center gap-1">
+
+        <p>Beneficios</p> 
+    <div className="flex justify-center">
+  <MoveRight className="w-6 h-6" />
+</div>
+       </div>
+      </Link>
       </div>
     </div>
   );
