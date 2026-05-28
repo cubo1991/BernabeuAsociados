@@ -1,169 +1,173 @@
 "use client";
+
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../../../lib/firebase";
 import UploadToCloudinary from "@/app/components/UploadToCloudinary";
 
+const INITIAL_FORM = {
+  companyName: "",
+  ownerName: "",
+  phone: "",
+  logoUrl: "",
+  contactLink: "",
+  contactType: "",
+  benefitType: "",
+  description: "",
+  benefit: "",
+  fullDescription: "",
+  address: "",
+};
+
+function Field({ label, required, children }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <label className="text-xs font-medium text-gray-600">
+        {label} {required && <span className="text-red-400">*</span>}
+      </label>
+      {children}
+    </div>
+  );
+}
+
 export default function AgregarEmpresa() {
-  const [form, setForm] = useState({
-    companyName: "",
-    ownerName: "",
-    phone: "",
-    logoUrl: "",
-    contactLink: "",
-    contactType: "",
-    benefitType: "",
-    description: "",
-    benefit: "",
-    fullDescription: "",
-    address: "", 
-  });
-  const [mensaje, setMensaje] = useState("");
+  const [form, setForm] = useState(INITIAL_FORM);
+  const [mensaje, setMensaje] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleImageUpload = (url) => {
-    setForm((prev) => ({ ...prev, logoUrl: url }));
-  };
+  const handleImageUpload = (url) => setForm((prev) => ({ ...prev, logoUrl: url }));
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMensaje("");
+    if (!form.companyName.trim() || !form.ownerName.trim()) {
+      setMensaje({ type: "error", text: "El nombre de la empresa y del dueño son obligatorios." });
+      return;
+    }
+    setSubmitting(true);
+    setMensaje(null);
     try {
       await addDoc(collection(db, "empresas"), form);
-      setMensaje("✅ Empresa agregada correctamente.");
-      setForm({
-        companyName: "",
-        ownerName: "",
-        phone: "",
-        logoUrl: "",
-        contactLink: "",
-        contactType: "",
-        benefitType: "",
-        description: "",
-        benefit: "",
-        fullDescription: "",
-        address: "",
-      });
+      setMensaje({ type: "success", text: "Empresa agregada correctamente." });
+      setForm(INITIAL_FORM);
     } catch {
-      setMensaje("❌ Error al agregar la empresa.");
+      setMensaje({ type: "error", text: "Ocurrió un error al agregar la empresa. Intentá de nuevo." });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="p-10 bg-gray-50 min-h-screen">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Agregar Empresa</h2>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">Agregar Empresa</h1>
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-lg shadow-md"
+        className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 max-w-3xl space-y-8"
       >
-        <input
-          name="companyName"
-          placeholder="Nombre de la empresa"
-          value={form.companyName}
-          onChange={handleChange}
-          className="input"
-        />
-        <input
-          name="ownerName"
-          placeholder="Nombre del dueño"
-          value={form.ownerName}
-          onChange={handleChange}
-          className="input"
-        />
-        <input
-          name="phone"
-          placeholder="Teléfono"
-          value={form.phone}
-          onChange={handleChange}
-          className="input"
-        />
-        <input
-          name="contactLink"
-          placeholder="Link de contacto"
-          value={form.contactLink}
-          onChange={handleChange}
-          className="input"
-        />
-        <select
-          name="contactType"
-          value={form.contactType}
-          onChange={handleChange}
-          className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">Tipo de contacto</option>
-          <option value="Instagram">Instagram</option>
-          <option value="Sitio Web">Sitio Web</option>
-        </select>
-        <select
-          name="benefitType"
-          value={form.benefitType}
-          onChange={handleChange}
-          className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">Seleccionar tipo de beneficio</option>
-          <option value="Texto">Texto</option>
-          <option value="Descuento">Descuento</option>
-        </select>
-        <input
-          name="description"
-          placeholder="Descripción corta"
-          value={form.description}
-          onChange={handleChange}
-          className="input"
-        />
-        <input
-          name="benefit"
-          placeholder="Beneficio"
-          value={form.benefit}
-          onChange={handleChange}
-          className="input"
-        />
-        <input
-          name="address"
-          placeholder="Domicilio (opcional)"
-          value={form.address}
-          onChange={handleChange}
-          className="input col-span-1 md:col-span-2"
-        />
-        <textarea
-          name="fullDescription"
-          placeholder="Descripción completa"
-          value={form.fullDescription}
-          onChange={handleChange}
-          className="input col-span-1 md:col-span-2 h-32 resize-none"
-        />
-
-        <div className="col-span-1 md:col-span-2 space-y-4">
-          <UploadToCloudinary onUpload={handleImageUpload} />
-          {form.logoUrl && (
-            <div className="mt-4 p-4 border rounded-md bg-gray-50">
-              <p className="text-sm text-gray-600 mb-2">Logo cargado:</p>
-              <img
-                src={form.logoUrl}
-                alt="Logo preview"
-                className="w-32 h-32 object-cover rounded-md shadow"
-              />
-            </div>
-          )}
+        {/* Datos generales */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+            Datos generales
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <Field label="Nombre de la empresa" required>
+              <input name="companyName" value={form.companyName} onChange={handleChange} className="input" placeholder="Ej: Panadería San Martín" />
+            </Field>
+            <Field label="Nombre del dueño" required>
+              <input name="ownerName" value={form.ownerName} onChange={handleChange} className="input" placeholder="Ej: Juan Pérez" />
+            </Field>
+            <Field label="Teléfono">
+              <input name="phone" value={form.phone} onChange={handleChange} className="input" placeholder="Ej: +54 9 261 000-0000" />
+            </Field>
+            <Field label="Domicilio">
+              <input name="address" value={form.address} onChange={handleChange} className="input" placeholder="Ej: Av. San Martín 1234, Mendoza" />
+            </Field>
+          </div>
         </div>
+
+        {/* Contacto */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+            Contacto
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <Field label="Tipo de contacto">
+              <select name="contactType" value={form.contactType} onChange={handleChange} className="input">
+                <option value="">Seleccionar...</option>
+                <option value="Instagram">Instagram</option>
+                <option value="Sitio Web">Sitio Web</option>
+              </select>
+            </Field>
+            <Field label="Link de contacto">
+              <input name="contactLink" value={form.contactLink} onChange={handleChange} className="input" placeholder="https://..." />
+            </Field>
+          </div>
+        </div>
+
+        {/* Beneficio */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+            Beneficio
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <Field label="Tipo de beneficio">
+              <select name="benefitType" value={form.benefitType} onChange={handleChange} className="input">
+                <option value="">Seleccionar...</option>
+                <option value="Texto">Texto</option>
+                <option value="Descuento">Descuento</option>
+              </select>
+            </Field>
+            <Field label="Descripción del beneficio">
+              <input name="benefit" value={form.benefit} onChange={handleChange} className="input" placeholder="Ej: 15% de descuento en todos los productos" />
+            </Field>
+          </div>
+        </div>
+
+        {/* Descripciones */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+            Descripciones
+          </p>
+          <div className="space-y-5">
+            <Field label="Descripción corta">
+              <input name="description" value={form.description} onChange={handleChange} className="input" placeholder="Resumen breve visible en la tarjeta" />
+            </Field>
+            <Field label="Descripción completa">
+              <textarea name="fullDescription" value={form.fullDescription} onChange={handleChange} className="input h-28 resize-none" placeholder="Descripción detallada de la empresa..." />
+            </Field>
+          </div>
+        </div>
+
+        {/* Logo */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+            Logo
+          </p>
+          <UploadToCloudinary onUpload={handleImageUpload} currentUrl={form.logoUrl} />
+        </div>
+
+        {mensaje && (
+          <div className={`p-4 rounded-lg text-sm font-medium border ${
+            mensaje.type === "success"
+              ? "bg-green-50 text-green-700 border-green-200"
+              : "bg-red-50 text-red-700 border-red-200"
+          }`}>
+            {mensaje.text}
+          </div>
+        )}
 
         <button
           type="submit"
-          className="col-span-1 md:col-span-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors"
+          disabled={submitting}
+          className="w-full py-2.5 rounded-lg font-semibold text-white text-sm transition-opacity disabled:opacity-60"
+          style={{ background: "var(--font-color)" }}
         >
-          Agregar
+          {submitting ? "Guardando..." : "Agregar empresa"}
         </button>
       </form>
-
-      {mensaje && (
-        <p className="mt-6 text-center text-sm font-medium text-green-600">
-          {mensaje}
-        </p>
-      )}
     </div>
   );
 }

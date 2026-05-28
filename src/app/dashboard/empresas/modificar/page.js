@@ -1,203 +1,206 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../lib/firebase";
 import UploadToCloudinary from "@/app/components/UploadToCloudinary";
 
+const EMPTY_FORM = {
+  companyName: "", ownerName: "", phone: "", logoUrl: "",
+  contactLink: "", contactType: "", benefitType: "",
+  benefit: "", description: "", fullDescription: "", address: "",
+};
+
+function Field({ label, children }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <label className="text-xs font-medium text-gray-600">{label}</label>
+      {children}
+    </div>
+  );
+}
+
 export default function ModificarEmpresaPage() {
   const [empresas, setEmpresas] = useState([]);
   const [selectedId, setSelectedId] = useState("");
-  const [form, setForm] = useState({
-    companyName: "",
-    ownerName: "",
-    phone: "",
-    logoUrl: "",
-    contactLink: "",
-    contactType: "",
-    benefitType: "",
-    benefit: "",
-    description: "",
-    fullDescription: "",
-    address: "",
-  });
-  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [submitting, setSubmitting] = useState(false);
+  const [mensaje, setMensaje] = useState(null);
 
   useEffect(() => {
     const fetchEmpresas = async () => {
       const snapshot = await getDocs(collection(db, "empresas"));
-      setEmpresas(
-        snapshot.docs.map(docSnap => ({
-          firestoreId: docSnap.id,
-          ...docSnap.data()
-        }))
-      );
+      setEmpresas(snapshot.docs.map((d) => ({ firestoreId: d.id, ...d.data() })));
     };
     fetchEmpresas();
   }, []);
 
   useEffect(() => {
-    if (selectedId) {
-      const empresa = empresas.find(e => e.firestoreId === selectedId);
-      if (empresa) {
-        setForm({
-          companyName: empresa.companyName || "",
-          ownerName: empresa.ownerName || "",
-          phone: empresa.phone || "",
-          logoUrl: empresa.logoUrl || "",
-          contactLink: empresa.contactLink || "",
-          contactType: empresa.contactType || "",
-          benefitType: empresa.benefitType || "",
-          benefit: empresa.benefit || "",
-          description: empresa.description || "",
-          fullDescription: empresa.fullDescription || "",
-          address: empresa.address || "",
-        });
-      }
+    if (!selectedId) return;
+    const empresa = empresas.find((e) => e.firestoreId === selectedId);
+    if (empresa) {
+      setForm({
+        companyName: empresa.companyName || "",
+        ownerName: empresa.ownerName || "",
+        phone: empresa.phone || "",
+        logoUrl: empresa.logoUrl || "",
+        contactLink: empresa.contactLink || "",
+        contactType: empresa.contactType || "",
+        benefitType: empresa.benefitType || "",
+        benefit: empresa.benefit || "",
+        description: empresa.description || "",
+        fullDescription: empresa.fullDescription || "",
+        address: empresa.address || "",
+      });
+      setMensaje(null);
     }
   }, [selectedId, empresas]);
 
-  const handleChange = e => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) =>
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleImageUpload = (url) => {
-    setForm(prev => ({ ...prev, logoUrl: url }));
-  };
+  const handleImageUpload = (url) =>
+    setForm((prev) => ({ ...prev, logoUrl: url }));
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    if (!selectedId) return;
+    setSubmitting(true);
+    setMensaje(null);
     try {
       await updateDoc(doc(db, "empresas", selectedId), form);
-      alert("✅ Empresa modificada correctamente");
-    } catch (err) {
-      alert("❌ Error al modificar la empresa");
+      setMensaje({ type: "success", text: "Empresa modificada correctamente." });
+    } catch {
+      setMensaje({ type: "error", text: "Ocurrió un error al guardar los cambios." });
+    } finally {
+      setSubmitting(false);
     }
-    setLoading(false);
   };
 
   return (
-    <div className="p-10 bg-gray-50 min-h-screen">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Modificar Empresa</h2>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">Modificar Empresa</h1>
 
-      <select
-        value={selectedId}
-        onChange={e => setSelectedId(e.target.value)}
-        className="mb-8 w-full max-w-md border border-gray-300 rounded-md px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        <option value="">Selecciona una empresa</option>
-        {empresas.map(e => (
-          <option key={e.firestoreId} value={e.firestoreId}>
-            {e.companyName || "Sin nombre"}
-          </option>
-        ))}
-      </select>
+      <div className="mb-6 max-w-sm">
+        <label className="text-xs font-medium text-gray-600 block mb-1">Seleccioná una empresa</label>
+        <select
+          value={selectedId}
+          onChange={(e) => setSelectedId(e.target.value)}
+          className="input"
+        >
+          <option value="">Seleccionar...</option>
+          {empresas.map((e) => (
+            <option key={e.firestoreId} value={e.firestoreId}>
+              {e.companyName || "Sin nombre"}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {selectedId && (
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 rounded-lg shadow-md"
+          className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 max-w-3xl space-y-8"
         >
-          <input
-            name="companyName"
-            placeholder="Nombre de la empresa"
-            value={form.companyName}
-            onChange={handleChange}
-            className="input"
-          />
-          <input
-            name="ownerName"
-            placeholder="Nombre del dueño"
-            value={form.ownerName}
-            onChange={handleChange}
-            className="input"
-          />
-          <input
-            name="phone"
-            placeholder="Teléfono"
-            value={form.phone}
-            onChange={handleChange}
-            className="input"
-          />
-          <input
-            name="contactLink"
-            placeholder="Link de contacto"
-            value={form.contactLink}
-            onChange={handleChange}
-            className="input"
-          />
-          <select
-            name="contactType"
-            value={form.contactType}
-            onChange={handleChange}
-            className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Tipo de contacto</option>
-            <option value="Instagram">Instagram</option>
-            <option value="Sitio Web">Sitio Web</option>
-          </select>
-          <select
-            name="benefitType"
-            value={form.benefitType}
-            onChange={handleChange}
-            className="input bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Tipo de beneficio</option>
-            <option value="Texto">Texto</option>
-            <option value="Descuento">Descuento</option>
-          </select>
-          <input
-            name="benefit"
-            placeholder="Beneficio"
-            value={form.benefit}
-            onChange={handleChange}
-            className="input"
-          />
-          <input
-            name="address"
-            placeholder="Dirección"
-            value={form.address}
-            onChange={handleChange}
-            className="input"
-          />
-          <input
-            name="description"
-            placeholder="Descripción corta"
-            value={form.description}
-            onChange={handleChange}
-            className="input"
-          />
-          <textarea
-            name="fullDescription"
-            placeholder="Descripción completa"
-            value={form.fullDescription}
-            onChange={handleChange}
-            className="input col-span-1 md:col-span-2 h-32 resize-none"
-          />
-
-          <div className="col-span-1 md:col-span-2 space-y-4">
-            <UploadToCloudinary onUpload={handleImageUpload} />
-            <div className="mt-4 p-4 border rounded-md bg-gray-50 flex items-center justify-center">
-              {form.logoUrl ? (
-                <img
-                  src={form.logoUrl}
-                  alt="Logo preview"
-                  className="w-32 h-32 object-cover rounded-md shadow"
-                />
-              ) : (
-                <div className="w-32 h-32 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-md text-gray-500 text-sm">
-                  Sin logo
-                </div>
-              )}
+          {/* Datos generales */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+              Datos generales
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <Field label="Nombre de la empresa">
+                <input name="companyName" value={form.companyName} onChange={handleChange} className="input" />
+              </Field>
+              <Field label="Nombre del dueño">
+                <input name="ownerName" value={form.ownerName} onChange={handleChange} className="input" />
+              </Field>
+              <Field label="Teléfono">
+                <input name="phone" value={form.phone} onChange={handleChange} className="input" />
+              </Field>
+              <Field label="Domicilio">
+                <input name="address" value={form.address} onChange={handleChange} className="input" />
+              </Field>
             </div>
           </div>
 
+          {/* Contacto */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+              Contacto
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <Field label="Tipo de contacto">
+                <select name="contactType" value={form.contactType} onChange={handleChange} className="input">
+                  <option value="">Seleccionar...</option>
+                  <option value="Instagram">Instagram</option>
+                  <option value="Sitio Web">Sitio Web</option>
+                </select>
+              </Field>
+              <Field label="Link de contacto">
+                <input name="contactLink" value={form.contactLink} onChange={handleChange} className="input" />
+              </Field>
+            </div>
+          </div>
+
+          {/* Beneficio */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+              Beneficio
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <Field label="Tipo de beneficio">
+                <select name="benefitType" value={form.benefitType} onChange={handleChange} className="input">
+                  <option value="">Seleccionar...</option>
+                  <option value="Texto">Texto</option>
+                  <option value="Descuento">Descuento</option>
+                </select>
+              </Field>
+              <Field label="Descripción del beneficio">
+                <input name="benefit" value={form.benefit} onChange={handleChange} className="input" />
+              </Field>
+            </div>
+          </div>
+
+          {/* Descripciones */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+              Descripciones
+            </p>
+            <div className="space-y-5">
+              <Field label="Descripción corta">
+                <input name="description" value={form.description} onChange={handleChange} className="input" />
+              </Field>
+              <Field label="Descripción completa">
+                <textarea name="fullDescription" value={form.fullDescription} onChange={handleChange} className="input h-28 resize-none" />
+              </Field>
+            </div>
+          </div>
+
+          {/* Logo */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wider mb-4" style={{ color: "var(--font-color)" }}>
+              Logo
+            </p>
+            <UploadToCloudinary onUpload={handleImageUpload} currentUrl={form.logoUrl} />
+          </div>
+
+          {mensaje && (
+            <div className={`p-4 rounded-lg text-sm font-medium border ${
+              mensaje.type === "success"
+                ? "bg-green-50 text-green-700 border-green-200"
+                : "bg-red-50 text-red-700 border-red-200"
+            }`}>
+              {mensaje.text}
+            </div>
+          )}
+
           <button
             type="submit"
-            disabled={loading}
-            className="col-span-1 md:col-span-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition-colors"
+            disabled={submitting}
+            className="w-full py-2.5 rounded-lg font-semibold text-white text-sm transition-opacity disabled:opacity-60"
+            style={{ background: "var(--font-color)" }}
           >
-            {loading ? "Guardando..." : "Modificar"}
+            {submitting ? "Guardando..." : "Guardar cambios"}
           </button>
         </form>
       )}
