@@ -1,8 +1,6 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import LayoutClientWrapper from "./components/LayoutClientWrapper";
-
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { AuthProvider } from "@/context/AuthContext";
@@ -33,10 +31,8 @@ export default function RootLayout({ children }) {
       >
            <AuthProvider>
         <Navbar />
-        <main className="flex-grow pt-[102px]">
-          <LayoutClientWrapper>
-            {children}
-          </LayoutClientWrapper>
+        <main className="grow pt-[102px]">
+          {children}
         </main>
         <Footer />
         </AuthProvider>
