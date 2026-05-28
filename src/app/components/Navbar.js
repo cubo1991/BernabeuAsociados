@@ -24,7 +24,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar bg-gray-900 text-white px-6 py-4 shadow-md">
+    <nav className="navbar bg-gray-900 text-white px-6 py-4 shadow-md fixed top-0 left-0 w-full z-50">
       <div className="max-w-7xl mx-auto">
 
         {/* --- HEADER (siempre horizontal) --- */}
@@ -64,6 +64,7 @@ export default function Navbar() {
           <ul className="hidden md:flex gap-6">
             <li><Link href="/" className="hover:text-indigo-400">Inicio</Link></li>
             <li><Link href="/nosotros" className="hover:text-indigo-400">Nosotros</Link></li>
+            <li><Link href="/soluciones" className="hover:text-indigo-400">Soluciones</Link></li>
             <li><Link href="/contacto" className="hover:text-indigo-400">Contacto</Link></li>
             
             {loading ? (
@@ -91,6 +92,7 @@ export default function Navbar() {
             <ul className="flex flex-col gap-4">
               <li><Link href="/" className="hover:text-indigo-400">Inicio</Link></li>
               <li><Link href="/nosotros" className="hover:text-indigo-400">Nosotros</Link></li>
+              <li><Link href="/soluciones" className="hover:text-indigo-400">Soluciones</Link></li>
               <li><Link href="/contacto" className="hover:text-indigo-400">Contacto</Link></li>
 
               {loading ? (

@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
       >
            <AuthProvider>
         <Navbar />
-        <main className="flex-grow">
+        <main className="flex-grow pt-[102px]">
           <LayoutClientWrapper>
             {children}
           </LayoutClientWrapper>
