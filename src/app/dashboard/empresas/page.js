@@ -1,28 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
+import Notification from "@/app/components/Notification";
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [notification, setNotification] = useState({ message: "", type: "" });
+
+  const filteredEmpresas = useMemo(() => {
+    if (!searchTerm.trim()) return empresas;
+    const term = searchTerm.toLowerCase();
+    return empresas.filter(
+      (e) =>
+        e.companyName?.toLowerCase().includes(term) ||
+        e.ownerName?.toLowerCase().includes(term) ||
+        e.description?.toLowerCase().includes(term) ||
+        e.phone?.includes(term)
+    );
+  }, [empresas, searchTerm]);
 
   useEffect(() => {
     const fetchEmpresas = async () => {
+      setLoading(true);
       try {
         const querySnapshot = await getDocs(collection(db, "empresas"));
-        setEmpresas(
-          querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-        );
-      } catch (err) {
-        setError("No se pudieron cargar las empresas. Intentá de nuevo.");
+        const data = querySnapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }))
+          .sort((a, b) => a.companyName?.localeCompare(b.companyName));
+        setEmpresas(data);
+      } catch {
+        setNotification({ message: "No se pudieron cargar las empresas. Intentá de nuevo.", type: "error" });
       } finally {
         setLoading(false);
       }
     };
-
     fetchEmpresas();
   }, []);
 
@@ -31,7 +46,7 @@ export default function EmpresasPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Empresas</h1>
-          {!loading && !error && (
+          {!loading && (
             <p className="text-sm text-gray-500 mt-0.5">
               {empresas.length} empresa{empresas.length !== 1 ? "s" : ""} registrada{empresas.length !== 1 ? "s" : ""}
             </p>
@@ -39,9 +54,15 @@ export default function EmpresasPage() {
         </div>
       </div>
 
-      {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
-          {error}
+      {!loading && empresas.length > 0 && (
+        <div className="mb-5 max-w-sm">
+          <input
+            type="text"
+            placeholder="Buscar por nombre, dueño, descripción o teléfono..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="input"
+          />
         </div>
       )}
 
@@ -61,6 +82,17 @@ export default function EmpresasPage() {
             </div>
           ))}
         </div>
+      ) : filteredEmpresas.length === 0 && searchTerm ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500 mb-2">No se encontraron empresas con esos criterios.</p>
+          <button
+            onClick={() => setSearchTerm("")}
+            className="text-sm font-medium hover:underline"
+            style={{ color: "var(--font-color)" }}
+          >
+            Limpiar búsqueda
+          </button>
+        </div>
       ) : empresas.length === 0 ? (
         <div className="text-center py-16 text-gray-400">
           <svg className="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" strokeWidth="1.2" viewBox="0 0 24 24">
@@ -71,7 +103,7 @@ export default function EmpresasPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {empresas.map((empresa) => (
+          {filteredEmpresas.map((empresa) => (
             <div
               key={empresa.id}
               className="bg-white border border-gray-200 rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow"
@@ -114,6 +146,12 @@ export default function EmpresasPage() {
           ))}
         </div>
       )}
+
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        onClose={() => setNotification({ message: "", type: "" })}
+      />
     </div>
   );
 }

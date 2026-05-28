@@ -4,6 +4,7 @@ import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../../../../../lib/firebase";
 import UploadToCloudinary from "@/app/components/UploadToCloudinary";
+import Notification from "@/app/components/Notification";
 
 const INITIAL_FORM = {
   companyName: "",
@@ -32,28 +33,41 @@ function Field({ label, required, children }) {
 
 export default function AgregarEmpresa() {
   const [form, setForm] = useState(INITIAL_FORM);
-  const [mensaje, setMensaje] = useState(null);
+  const [notification, setNotification] = useState({ message: "", type: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.companyName.trim()) newErrors.companyName = "El nombre de la empresa es obligatorio";
+    if (!form.ownerName.trim()) newErrors.ownerName = "El nombre del dueño es obligatorio";
+    if (!form.description.trim()) newErrors.description = "La descripción corta es obligatoria";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleImageUpload = (url) => setForm((prev) => ({ ...prev, logoUrl: url }));
 
-  const handleChange = (e) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.companyName.trim() || !form.ownerName.trim()) {
-      setMensaje({ type: "error", text: "El nombre de la empresa y del dueño son obligatorios." });
+    if (!validateForm()) {
+      setNotification({ message: "Completá los campos obligatorios.", type: "error" });
       return;
     }
     setSubmitting(true);
-    setMensaje(null);
     try {
-      await addDoc(collection(db, "empresas"), form);
-      setMensaje({ type: "success", text: "Empresa agregada correctamente." });
+      await addDoc(collection(db, "empresas"), { ...form, createdAt: new Date().toISOString() });
+      setNotification({ message: "Empresa agregada correctamente.", type: "success" });
       setForm(INITIAL_FORM);
+      setErrors({});
     } catch {
-      setMensaje({ type: "error", text: "Ocurrió un error al agregar la empresa. Intentá de nuevo." });
+      setNotification({ message: "Ocurrió un error al agregar la empresa. Intentá de nuevo.", type: "error" });
     } finally {
       setSubmitting(false);
     }
@@ -74,10 +88,12 @@ export default function AgregarEmpresa() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <Field label="Nombre de la empresa" required>
-              <input name="companyName" value={form.companyName} onChange={handleChange} className="input" placeholder="Ej: Panadería San Martín" />
+              <input name="companyName" value={form.companyName} onChange={handleChange} className={`input ${errors.companyName ? "border-red-400" : ""}`} placeholder="Ej: Panadería San Martín" />
+              {errors.companyName && <p className="text-xs text-red-500 mt-0.5">{errors.companyName}</p>}
             </Field>
             <Field label="Nombre del dueño" required>
-              <input name="ownerName" value={form.ownerName} onChange={handleChange} className="input" placeholder="Ej: Juan Pérez" />
+              <input name="ownerName" value={form.ownerName} onChange={handleChange} className={`input ${errors.ownerName ? "border-red-400" : ""}`} placeholder="Ej: Juan Pérez" />
+              {errors.ownerName && <p className="text-xs text-red-500 mt-0.5">{errors.ownerName}</p>}
             </Field>
             <Field label="Teléfono">
               <input name="phone" value={form.phone} onChange={handleChange} className="input" placeholder="Ej: +54 9 261 000-0000" />
@@ -99,6 +115,8 @@ export default function AgregarEmpresa() {
                 <option value="">Seleccionar...</option>
                 <option value="Instagram">Instagram</option>
                 <option value="Sitio Web">Sitio Web</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Email">Email</option>
               </select>
             </Field>
             <Field label="Link de contacto">
@@ -116,8 +134,9 @@ export default function AgregarEmpresa() {
             <Field label="Tipo de beneficio">
               <select name="benefitType" value={form.benefitType} onChange={handleChange} className="input">
                 <option value="">Seleccionar...</option>
-                <option value="Texto">Texto</option>
                 <option value="Descuento">Descuento</option>
+                <option value="Promoción">Promoción</option>
+                <option value="Beneficio">Beneficio</option>
               </select>
             </Field>
             <Field label="Descripción del beneficio">
@@ -132,11 +151,16 @@ export default function AgregarEmpresa() {
             Descripciones
           </p>
           <div className="space-y-5">
-            <Field label="Descripción corta">
-              <input name="description" value={form.description} onChange={handleChange} className="input" placeholder="Resumen breve visible en la tarjeta" />
+            <Field label="Descripción corta" required>
+              <input name="description" value={form.description} onChange={handleChange} className={`input ${errors.description ? "border-red-400" : ""}`} placeholder="Resumen breve visible en la tarjeta" maxLength={100} />
+              <div className="flex justify-between items-center mt-0.5">
+                {errors.description && <p className="text-xs text-red-500">{errors.description}</p>}
+                <p className="text-xs text-gray-400 ml-auto">{form.description.length}/100</p>
+              </div>
             </Field>
             <Field label="Descripción completa">
-              <textarea name="fullDescription" value={form.fullDescription} onChange={handleChange} className="input h-28 resize-none" placeholder="Descripción detallada de la empresa..." />
+              <textarea name="fullDescription" value={form.fullDescription} onChange={handleChange} className="input h-28 resize-none" placeholder="Descripción detallada de la empresa..." maxLength={500} />
+              <p className="text-xs text-gray-400 text-right">{form.fullDescription.length}/500</p>
             </Field>
           </div>
         </div>
@@ -149,16 +173,6 @@ export default function AgregarEmpresa() {
           <UploadToCloudinary onUpload={handleImageUpload} currentUrl={form.logoUrl} />
         </div>
 
-        {mensaje && (
-          <div className={`p-4 rounded-lg text-sm font-medium border ${
-            mensaje.type === "success"
-              ? "bg-green-50 text-green-700 border-green-200"
-              : "bg-red-50 text-red-700 border-red-200"
-          }`}>
-            {mensaje.text}
-          </div>
-        )}
-
         <button
           type="submit"
           disabled={submitting}
@@ -168,6 +182,12 @@ export default function AgregarEmpresa() {
           {submitting ? "Guardando..." : "Agregar empresa"}
         </button>
       </form>
+
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        onClose={() => setNotification({ message: "", type: "" })}
+      />
     </div>
   );
 }

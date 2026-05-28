@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../../lib/firebase";
 import UploadToCloudinary from "@/app/components/UploadToCloudinary";
+import Notification from "@/app/components/Notification";
 
 const EMPTY_FORM = {
   companyName: "", ownerName: "", phone: "", logoUrl: "",
@@ -11,10 +12,12 @@ const EMPTY_FORM = {
   benefit: "", description: "", fullDescription: "", address: "",
 };
 
-function Field({ label, children }) {
+function Field({ label, required, children }) {
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-xs font-medium text-gray-600">{label}</label>
+      <label className="text-xs font-medium text-gray-600">
+        {label} {required && <span className="text-red-400">*</span>}
+      </label>
       {children}
     </div>
   );
@@ -25,12 +28,21 @@ export default function ModificarEmpresaPage() {
   const [selectedId, setSelectedId] = useState("");
   const [form, setForm] = useState(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
-  const [mensaje, setMensaje] = useState(null);
+  const [loadingEmpresas, setLoadingEmpresas] = useState(false);
+  const [notification, setNotification] = useState({ message: "", type: "" });
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchEmpresas = async () => {
-      const snapshot = await getDocs(collection(db, "empresas"));
-      setEmpresas(snapshot.docs.map((d) => ({ firestoreId: d.id, ...d.data() })));
+      setLoadingEmpresas(true);
+      try {
+        const snapshot = await getDocs(collection(db, "empresas"));
+        setEmpresas(snapshot.docs.map((d) => ({ firestoreId: d.id, ...d.data() })));
+      } catch {
+        setNotification({ message: "Error al cargar las empresas.", type: "error" });
+      } finally {
+        setLoadingEmpresas(false);
+      }
     };
     fetchEmpresas();
   }, []);
@@ -52,12 +64,24 @@ export default function ModificarEmpresaPage() {
         fullDescription: empresa.fullDescription || "",
         address: empresa.address || "",
       });
-      setMensaje(null);
+      setErrors({});
+      setNotification({ message: "", type: "" });
     }
   }, [selectedId, empresas]);
 
-  const handleChange = (e) =>
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.companyName.trim()) newErrors.companyName = "El nombre es obligatorio";
+    if (!form.ownerName.trim()) newErrors.ownerName = "El dueño es obligatorio";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
   const handleImageUpload = (url) =>
     setForm((prev) => ({ ...prev, logoUrl: url }));
@@ -65,13 +89,16 @@ export default function ModificarEmpresaPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedId) return;
+    if (!validateForm()) {
+      setNotification({ message: "Completá los campos obligatorios.", type: "error" });
+      return;
+    }
     setSubmitting(true);
-    setMensaje(null);
     try {
-      await updateDoc(doc(db, "empresas", selectedId), form);
-      setMensaje({ type: "success", text: "Empresa modificada correctamente." });
+      await updateDoc(doc(db, "empresas", selectedId), { ...form, updatedAt: new Date().toISOString() });
+      setNotification({ message: "Empresa modificada correctamente.", type: "success" });
     } catch {
-      setMensaje({ type: "error", text: "Ocurrió un error al guardar los cambios." });
+      setNotification({ message: "Ocurrió un error al guardar los cambios.", type: "error" });
     } finally {
       setSubmitting(false);
     }
@@ -86,9 +113,10 @@ export default function ModificarEmpresaPage() {
         <select
           value={selectedId}
           onChange={(e) => setSelectedId(e.target.value)}
+          disabled={loadingEmpresas}
           className="input"
         >
-          <option value="">Seleccionar...</option>
+          <option value="">{loadingEmpresas ? "Cargando..." : "Seleccionar..."}</option>
           {empresas.map((e) => (
             <option key={e.firestoreId} value={e.firestoreId}>
               {e.companyName || "Sin nombre"}
@@ -108,11 +136,13 @@ export default function ModificarEmpresaPage() {
               Datos generales
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <Field label="Nombre de la empresa">
-                <input name="companyName" value={form.companyName} onChange={handleChange} className="input" />
+              <Field label="Nombre de la empresa" required>
+                <input name="companyName" value={form.companyName} onChange={handleChange} className={`input ${errors.companyName ? "border-red-400" : ""}`} />
+                {errors.companyName && <p className="text-xs text-red-500 mt-0.5">{errors.companyName}</p>}
               </Field>
-              <Field label="Nombre del dueño">
-                <input name="ownerName" value={form.ownerName} onChange={handleChange} className="input" />
+              <Field label="Nombre del dueño" required>
+                <input name="ownerName" value={form.ownerName} onChange={handleChange} className={`input ${errors.ownerName ? "border-red-400" : ""}`} />
+                {errors.ownerName && <p className="text-xs text-red-500 mt-0.5">{errors.ownerName}</p>}
               </Field>
               <Field label="Teléfono">
                 <input name="phone" value={form.phone} onChange={handleChange} className="input" />
@@ -134,6 +164,8 @@ export default function ModificarEmpresaPage() {
                   <option value="">Seleccionar...</option>
                   <option value="Instagram">Instagram</option>
                   <option value="Sitio Web">Sitio Web</option>
+                  <option value="WhatsApp">WhatsApp</option>
+                  <option value="Email">Email</option>
                 </select>
               </Field>
               <Field label="Link de contacto">
@@ -151,8 +183,9 @@ export default function ModificarEmpresaPage() {
               <Field label="Tipo de beneficio">
                 <select name="benefitType" value={form.benefitType} onChange={handleChange} className="input">
                   <option value="">Seleccionar...</option>
-                  <option value="Texto">Texto</option>
                   <option value="Descuento">Descuento</option>
+                  <option value="Promoción">Promoción</option>
+                  <option value="Beneficio">Beneficio</option>
                 </select>
               </Field>
               <Field label="Descripción del beneficio">
@@ -168,10 +201,12 @@ export default function ModificarEmpresaPage() {
             </p>
             <div className="space-y-5">
               <Field label="Descripción corta">
-                <input name="description" value={form.description} onChange={handleChange} className="input" />
+                <input name="description" value={form.description} onChange={handleChange} className="input" maxLength={100} />
+                <p className="text-xs text-gray-400 text-right">{form.description.length}/100</p>
               </Field>
               <Field label="Descripción completa">
-                <textarea name="fullDescription" value={form.fullDescription} onChange={handleChange} className="input h-28 resize-none" />
+                <textarea name="fullDescription" value={form.fullDescription} onChange={handleChange} className="input h-28 resize-none" maxLength={500} />
+                <p className="text-xs text-gray-400 text-right">{form.fullDescription.length}/500</p>
               </Field>
             </div>
           </div>
@@ -184,16 +219,6 @@ export default function ModificarEmpresaPage() {
             <UploadToCloudinary onUpload={handleImageUpload} currentUrl={form.logoUrl} />
           </div>
 
-          {mensaje && (
-            <div className={`p-4 rounded-lg text-sm font-medium border ${
-              mensaje.type === "success"
-                ? "bg-green-50 text-green-700 border-green-200"
-                : "bg-red-50 text-red-700 border-red-200"
-            }`}>
-              {mensaje.text}
-            </div>
-          )}
-
           <button
             type="submit"
             disabled={submitting}
@@ -204,6 +229,12 @@ export default function ModificarEmpresaPage() {
           </button>
         </form>
       )}
+
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        onClose={() => setNotification({ message: "", type: "" })}
+      />
     </div>
   );
 }

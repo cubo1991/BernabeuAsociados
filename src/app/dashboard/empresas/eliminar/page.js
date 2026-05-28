@@ -3,18 +3,27 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../../../../lib/firebase";
+import Notification from "@/app/components/Notification";
 
 export default function EliminarEmpresaPage() {
   const [empresas, setEmpresas] = useState([]);
   const [selectedId, setSelectedId] = useState("");
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [mensaje, setMensaje] = useState(null);
+  const [loadingEmpresas, setLoadingEmpresas] = useState(false);
+  const [notification, setNotification] = useState({ message: "", type: "" });
 
   useEffect(() => {
     const fetchEmpresas = async () => {
-      const snapshot = await getDocs(collection(db, "empresas"));
-      setEmpresas(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+      setLoadingEmpresas(true);
+      try {
+        const snapshot = await getDocs(collection(db, "empresas"));
+        setEmpresas(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+      } catch {
+        setNotification({ message: "Error al cargar las empresas.", type: "error" });
+      } finally {
+        setLoadingEmpresas(false);
+      }
     };
     fetchEmpresas();
   }, []);
@@ -24,7 +33,6 @@ export default function EliminarEmpresaPage() {
   const handleSeleccion = (e) => {
     setSelectedId(e.target.value);
     setConfirming(false);
-    setMensaje(null);
   };
 
   const handleDelete = async () => {
@@ -34,9 +42,9 @@ export default function EliminarEmpresaPage() {
       setEmpresas((prev) => prev.filter((e) => e.id !== selectedId));
       setSelectedId("");
       setConfirming(false);
-      setMensaje({ type: "success", text: "Empresa eliminada correctamente." });
+      setNotification({ message: "Empresa eliminada correctamente.", type: "success" });
     } catch {
-      setMensaje({ type: "error", text: "Ocurrió un error al eliminar la empresa." });
+      setNotification({ message: "Ocurrió un error al eliminar la empresa.", type: "error" });
     } finally {
       setLoading(false);
     }
@@ -46,24 +54,15 @@ export default function EliminarEmpresaPage() {
     <div className="p-8">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Eliminar Empresa</h1>
 
-      {mensaje && (
-        <div className={`mb-6 p-4 rounded-lg text-sm font-medium border max-w-md ${
-          mensaje.type === "success"
-            ? "bg-green-50 text-green-700 border-green-200"
-            : "bg-red-50 text-red-700 border-red-200"
-        }`}>
-          {mensaje.text}
-        </div>
-      )}
-
       <div className="mb-6 max-w-sm">
         <label className="text-xs font-medium text-gray-600 block mb-1">Seleccioná una empresa</label>
         <select
           value={selectedId}
           onChange={handleSeleccion}
+          disabled={loadingEmpresas}
           className="input"
         >
-          <option value="">Seleccionar...</option>
+          <option value="">{loadingEmpresas ? "Cargando..." : "Seleccionar..."}</option>
           {empresas.map((e) => (
             <option key={e.id} value={e.id}>{e.companyName}</option>
           ))}
@@ -127,6 +126,12 @@ export default function EliminarEmpresaPage() {
           </div>
         </div>
       )}
+
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        onClose={() => setNotification({ message: "", type: "" })}
+      />
     </div>
   );
 }
