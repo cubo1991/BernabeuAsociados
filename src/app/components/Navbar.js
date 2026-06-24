@@ -24,7 +24,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar bg-gray-900 text-white px-6 py-4 shadow-md">
+    <nav className="navbar bg-gray-900 text-white px-6 py-4 shadow-md fixed top-0 left-0 w-full z-50">
       <div className="max-w-7xl mx-auto">
 
         {/* --- HEADER (siempre horizontal) --- */}
@@ -62,16 +62,17 @@ export default function Navbar() {
 
           {/* NAV DESKTOP */}
           <ul className="hidden md:flex gap-6">
-            <li><Link href="/" className="hover:text-indigo-400">Inicio</Link></li>
-            <li><Link href="/nosotros" className="hover:text-indigo-400">Nosotros</Link></li>
-            <li><Link href="/contacto" className="hover:text-indigo-400">Contacto</Link></li>
+            <li><Link href="/" className="hover:text-(--font-color)">Inicio</Link></li>
+            <li><Link href="/nosotros" className="hover:text-(--font-color)">Nosotros</Link></li>
+            <li><Link href="/empresas" className="hover:text-(--font-color)">Empresas</Link></li>
+            <li><Link href="/contacto" className="hover:text-(--font-color)">Contacto</Link></li>
             
             {loading ? (
               <li className="text-gray-400">Cargando...</li>
             ) : user ? (
               <>
                 {user.role === "admin" && (
-                  <li><Link href="/dashboard" className="hover:text-indigo-400">Dashboard</Link></li>
+                  <li><Link href="/dashboard" className="hover:text-(--font-color)">Dashboard</Link></li>
                 )}
                 <li>
                   <button onClick={handleLogout} className="hover:text-red-400">
@@ -80,7 +81,7 @@ export default function Navbar() {
                 </li>
               </>
             ) : (
-              <li><Link href="/login" className="hover:text-indigo-400">Ingresar</Link></li>
+              <li><Link href="/login" className="hover:text-(--font-color)">Ingresar</Link></li>
             )}
           </ul>
         </div>
@@ -89,16 +90,17 @@ export default function Navbar() {
         {isOpen && (
           <div className="md:hidden mt-4 bg-gray-800 p-4 rounded-lg animate-fade-down">
             <ul className="flex flex-col gap-4">
-              <li><Link href="/" className="hover:text-indigo-400">Inicio</Link></li>
-              <li><Link href="/nosotros" className="hover:text-indigo-400">Nosotros</Link></li>
-              <li><Link href="/contacto" className="hover:text-indigo-400">Contacto</Link></li>
+              <li><Link href="/" className="hover:text-(--font-color)">Inicio</Link></li>
+              <li><Link href="/nosotros" className="hover:text-(--font-color)">Nosotros</Link></li>
+              <li><Link href="/empresas" className="hover:text-(--font-color)">Empresas</Link></li>
+              <li><Link href="/contacto" className="hover:text-(--font-color)">Contacto</Link></li>
 
               {loading ? (
                 <li className="text-gray-400">Cargando...</li>
               ) : user ? (
                 <>
                   {user.role === "admin" && (
-                    <li><Link href="/dashboard" className="hover:text-indigo-400">Dashboard</Link></li>
+                    <li><Link href="/dashboard" className="hover:text-(--font-color)">Dashboard</Link></li>
                   )}
                   <li>
                     <button onClick={handleLogout} className="hover:text-red-400">
@@ -107,7 +109,7 @@ export default function Navbar() {
                   </li>
                 </>
               ) : (
-                <li><Link href="/login" className="hover:text-indigo-400">Ingresar</Link></li>
+                <li><Link href="/login" className="hover:text-(--font-color)">Ingresar</Link></li>
               )}
             </ul>
           </div>

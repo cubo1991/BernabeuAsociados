@@ -5,7 +5,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../../lib/firebase";
 
 export default function Page({ params }) {
-  const { empresasId } = params ?? {};
+  const { empresasId } = React.use(params);
   const [empresa, setEmpresa] = useState(null);
   const [notFound, setNotFound] = useState(false);
 

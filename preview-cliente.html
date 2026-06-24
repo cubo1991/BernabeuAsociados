@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bernabeu & Asociados — Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #b2935b;
+      --brand-10: rgba(178,147,91,0.10);
+      --brand-15: rgba(178,147,91,0.15);
+      --gray-50:  #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', Arial, Helvetica, sans-serif;
+      background: #fff;
+      color: var(--gray-800);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── UTILS ──────────────────────────────────── */
+    .container { max-width: 1100px; margin: 0 auto; }
+    .text-brand { color: var(--brand); }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand);
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      border: 1px solid var(--gray-200);
+    }
+
+    /* ── PAGE SWITCHING ─────────────────────────── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── NAVBAR ─────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--gray-900);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      padding: 0.9rem 1.5rem;
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 1rem; cursor: pointer; }
+    .nav-brand-logo {
+      width: 56px; height: 56px;
+      background: var(--brand-15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.1rem; color: var(--brand);
+    }
+    .nav-brand-texts h2 { font-size: 1.25rem; font-weight: 700; color: var(--brand); line-height: 1.2; }
+    .nav-brand-texts p  { font-size: 0.78rem; color: var(--brand); opacity: 0.85; }
+    .nav-links { display: flex; gap: 1.75rem; list-style: none; }
+    .nav-links a {
+      color: #fff; text-decoration: none;
+      font-size: 0.9rem; transition: color 0.2s;
+      cursor: pointer;
+      background: none; border: none; font-family: inherit; font-size: 0.9rem;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--brand); }
+
+    .hamburger { display: none; cursor: pointer; background: none; border: none; color: #fff; }
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 1rem;
+      background: var(--gray-800); border-radius: 0.5rem;
+      padding: 1rem; margin-top: 0.75rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: #fff; text-decoration: none; font-size: 0.95rem;
+      cursor: pointer; background: none; border: none; font-family: inherit; text-align: left;
+    }
+    .mobile-menu a:hover { color: var(--brand); }
+
+    @media(max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; }
+    }
+
+    /* ── HOME ───────────────────────────────────── */
+
+    /* Hero */
+    .hero {
+      background: var(--gray-900);
+      color: #fff;
+      padding: 5rem 2.5rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 em { font-style: italic; font-weight: 400; color: var(--brand); }
+    .hero p { color: var(--gray-400); font-size: 1.1rem; max-width: 640px; margin: 0 auto 2.5rem; }
+    .btn-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block; padding: 0.75rem 2rem;
+      background: var(--brand); color: #fff;
+      border-radius: 0.5rem; font-weight: 600; font-size: 0.95rem;
+      text-decoration: none; transition: opacity 0.2s, transform 0.2s;
+      cursor: pointer; border: none;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-block; padding: 0.75rem 2rem;
+      border: 1px solid var(--gray-600); color: var(--gray-300);
+      border-radius: 0.5rem; font-weight: 600; font-size: 0.95rem;
+      text-decoration: none; transition: border-color 0.2s, color 0.2s;
+      cursor: pointer; background: none;
+    }
+    .btn-outline:hover { border-color: var(--gray-400); color: #fff; }
+
+    /* Narrative */
+    .narrative {
+      background: #fff;
+      padding: 4rem 2.5rem;
+    }
+    .narrative-grid {
+      max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      align-items: start;
+    }
+    @media(max-width: 768px) { .narrative-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+    .narrative h2 { font-size: 1.9rem; font-weight: 700; color: var(--gray-900); margin-bottom: 1.5rem; line-height: 1.3; }
+    .narrative .text-block p { margin-bottom: 0.75rem; color: var(--gray-600); }
+    .narrative .text-block p.quote { font-style: italic; color: var(--gray-800); }
+
+    .step { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.5rem; }
+    .step-num {
+      flex-shrink: 0; width: 2.5rem; height: 2.5rem;
+      border-radius: 50%; background: var(--brand);
+      color: #fff; font-weight: 700; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-body h4 { font-weight: 600; color: var(--gray-900); margin-bottom: 0.25rem; }
+    .step-body p  { font-size: 0.9rem; color: var(--gray-600); }
+
+    /* Services */
+    .services {
+      background: var(--gray-50);
+      padding: 4rem 2.5rem;
+    }
+    .services-head { text-align: center; max-width: 520px; margin: 0 auto 3rem; }
+    .services-head h2 { font-size: 1.9rem; font-weight: 700; color: var(--gray-900); margin-bottom: 0.75rem; }
+    .services-head p { color: var(--gray-600); }
+    .services-grid {
+      max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    @media(max-width: 900px) { .services-grid { grid-template-columns: 1fr 1fr; } }
+    @media(max-width: 600px) { .services-grid { grid-template-columns: 1fr; } }
+    .service-card {
+      background: #fff; border-radius: 0.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .service-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.12); transform: translateY(-4px); }
+    .service-icon {
+      width: 3rem; height: 3rem; border-radius: 0.5rem;
+      background: var(--brand-10); color: var(--brand);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .service-icon svg { width: 1.4rem; height: 1.4rem; }
+    .service-card h3 { font-size: 1.15rem; font-weight: 600; color: var(--gray-900); }
+    .service-card p  { font-size: 0.88rem; color: var(--gray-600); line-height: 1.7; flex-grow: 1; }
+    .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    /* Differentiators */
+    .diff {
+      background: var(--gray-900); color: #fff;
+      padding: 4rem 2.5rem;
+    }
+    .diff-grid {
+      max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      align-items: start;
+    }
+    @media(max-width: 768px) { .diff-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+    .diff-left h2 { font-size: 1.9rem; font-weight: 700; color: #fff; margin-bottom: 1.25rem; line-height: 1.3; }
+    .diff-left h2 em { font-style: italic; font-weight: 400; color: var(--brand); }
+    .diff-left p { color: var(--gray-400); margin-bottom: 2rem; }
+    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .stat-box {
+      background: var(--gray-800); border: 1px solid var(--gray-700);
+      border-radius: 0.5rem; padding: 1.25rem;
+    }
+    .stat-box strong { display: block; font-size: 1.05rem; font-weight: 700; color: var(--brand); margin-bottom: 0.25rem; }
+    .stat-box span  { font-size: 0.82rem; color: var(--gray-500); }
+    .diff-item {
+      background: var(--gray-800); border: 1px solid var(--gray-700);
+      border-radius: 0.5rem; padding: 1.25rem;
+      display: flex; gap: 1rem; align-items: flex-start;
+      margin-bottom: 1rem; transition: background 0.2s;
+    }
+    .diff-item:hover { background: var(--gray-700); }
+    .diff-item-icon {
+      flex-shrink: 0; width: 2.5rem; height: 2.5rem;
+      border-radius: 0.5rem; background: var(--brand-15); color: var(--brand);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .diff-item-icon svg { width: 1.2rem; height: 1.2rem; }
+    .diff-item h4 { font-weight: 600; color: #fff; margin-bottom: 0.25rem; }
+    .diff-item p  { font-size: 0.875rem; color: var(--gray-400); }
+
+    /* CTA */
+    .cta {
+      background: #fff; padding: 4rem 2.5rem; text-align: center;
+    }
+    .cta h2 { font-size: 2.5rem; font-weight: 700; color: var(--gray-900); margin-bottom: 1rem; }
+    .cta > .container > p { color: var(--gray-600); font-size: 1.1rem; max-width: 480px; margin: 0 auto 2rem; }
+
+    /* ── NOSOTROS ──────────────────────────────── */
+    .nosotros { background: var(--gray-50); padding: 4rem 2.5rem; }
+    .nosotros h1 { font-size: 2.25rem; font-weight: 700; text-align: center; color: var(--gray-900); margin-bottom: 2rem; }
+    .nosotros-text { max-width: 750px; margin: 0 auto 3.5rem; }
+    .nosotros-text p { color: var(--gray-700); font-size: 1.05rem; line-height: 1.8; margin-bottom: 1.1rem; }
+    .nosotros h2 { font-size: 1.5rem; font-weight: 600; text-align: center; margin-bottom: 2rem; }
+    .team-grid {
+      max-width: 900px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem;
+    }
+    @media(max-width: 600px) { .team-grid { grid-template-columns: 1fr; } }
+    .team-member { display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .team-avatar {
+      width: 9rem; height: 9rem; border-radius: 50%;
+      overflow: hidden; margin-bottom: 1rem;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      background: var(--gray-200);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; font-weight: 700; color: var(--gray-500);
+    }
+    .team-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .team-member h3 { font-size: 1.1rem; font-weight: 600; color: var(--gray-900); }
+    .team-member p  { font-size: 0.9rem; color: var(--gray-500); }
+    .team-last { grid-column: 1 / -1; display: flex; justify-content: center; }
+    .team-last .team-member { max-width: 220px; }
+
+    /* ── EMPRESAS ──────────────────────────────── */
+    .empresas { background: #fff; padding: 3rem 2.5rem; }
+    .empresas-header { margin-bottom: 2rem; }
+    .empresas-header h1 { font-size: 1.75rem; font-weight: 700; color: var(--gray-900); }
+    .empresas-header p  { font-size: 0.9rem; color: var(--gray-500); margin-top: 0.25rem; }
+    .companies-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    @media(max-width: 900px) { .companies-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width: 480px) { .companies-grid { grid-template-columns: 1fr; } }
+    .company-card {
+      background: #fff; border-radius: 0.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 1rem; display: flex; flex-direction: column; align-items: center;
+      text-align: center; transition: box-shadow 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .company-card:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.13); transform: translateY(-3px); }
+    .company-logo {
+      width: 100%; height: 8rem;
+      position: relative; margin-bottom: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--gray-100); border-radius: 0.4rem; overflow: hidden;
+    }
+    .company-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .company-logo-placeholder {
+      font-size: 2.2rem; font-weight: 700; color: var(--gray-400);
+    }
+    .company-card h2 {
+      font-size: 1rem; font-weight: 700; color: var(--gray-900);
+      margin-bottom: 0.25rem; line-height: 1.3;
+    }
+    .company-card p { font-size: 0.82rem; color: var(--gray-600); margin-bottom: 0.5rem; }
+    .more-link {
+      margin-top: 0.5rem; font-size: 0.82rem; color: #4f46e5;
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+
+    /* ── CONTACTO ──────────────────────────────── */
+    .contacto { background: var(--gray-50); padding: 4rem 2.5rem; }
+    .contacto h1 { font-size: 2.25rem; font-weight: 700; text-align: center; color: var(--gray-900); margin-bottom: 1.5rem; }
+    .contacto-text { max-width: 640px; margin: 0 auto; }
+    .contacto-text > p { color: var(--gray-700); font-size: 1.05rem; line-height: 1.8; margin-bottom: 2rem; text-align: center; }
+    .contact-card {
+      background: #fff; border-radius: 0.75rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      padding: 2rem; margin-bottom: 2rem;
+    }
+    .contact-item { margin-bottom: 1.5rem; }
+    .contact-item:last-child { margin-bottom: 0; }
+    .contact-item h2 { font-size: 1.1rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; }
+    .contact-item a { color: #2563eb; text-decoration: none; }
+    .contact-item a:hover { text-decoration: underline; }
+    .contact-item a.green { color: #16a34a; }
+    .contacto-footer { text-align: center; color: var(--gray-500); font-size: 0.85rem; }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    footer {
+      background: var(--gray-900); color: var(--gray-400);
+      text-align: center; padding: 1.5rem;
+      font-size: 0.85rem;
+    }
+    footer span { color: var(--brand); }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ NAVBAR ══════════════ -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand" onclick="showPage('inicio')">
+      <div class="nav-brand-logo">B&A</div>
+      <div class="nav-brand-texts">
+        <h2>Bernabeu &amp; Asociados</h2>
+        <p>Consultora Empresarial</p>
+      </div>
+    </div>
+
+    <ul class="nav-links" id="navDesktop">
+      <li><a onclick="showPage('inicio')" id="nav-inicio">Inicio</a></li>
+      <li><a onclick="showPage('nosotros')" id="nav-nosotros">Nosotros</a></li>
+      <li><a onclick="showPage('empresas')" id="nav-empresas">Empresas</a></li>
+      <li><a onclick="showPage('contacto')" id="nav-contacto">Contacto</a></li>
+    </ul>
+
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menú">
+      <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+  <div class="container">
+    <div class="mobile-menu" id="mobileMenu">
+      <a onclick="showPage('inicio'); toggleMenu()">Inicio</a>
+      <a onclick="showPage('nosotros'); toggleMenu()">Nosotros</a>
+      <a onclick="showPage('empresas'); toggleMenu()">Empresas</a>
+      <a onclick="showPage('contacto'); toggleMenu()">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════ INICIO ══════════════ -->
+<div id="page-inicio" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="section-label">Qué hacemos</span>
+    <h1>Lo concreto primero.<br><em>Lo estratégico, después.</em></h1>
+    <p>Comenzamos con una necesidad puntual: costos, rentabilidad, punto de equilibrio. Nos convertimos en el equipo que te acompaña en cada decisión que importa.</p>
+    <div class="btn-group">
+      <a href="https://wa.me/5491153243493?text=%C2%A1Hola!%20Vengo%20desde%20la%20web%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20sus%20soluciones." class="btn-primary" target="_blank">Hablemos</a>
+      <button class="btn-outline" onclick="showPage('nosotros')">Conocé el equipo</button>
+    </div>
+  </section>
+
+  <!-- NARRATIVE -->
+  <section class="narrative">
+    <div class="narrative-grid">
+      <div>
+        <span class="section-label">Cómo empezamos</span>
+        <h2>Llegamos para dar respuesta a una inquietud. Nos quedamos por la confianza.</h2>
+        <div class="text-block">
+          <p>Los empresarios suelen compartirnos inquietudes concretas:</p>
+          <p class="quote">"No sé si me conviene tomar esta decisión"</p>
+          <p class="quote">"Vendo y cobro. Sin embargo, a fin de mes no tengo dinero."</p>
+          <p class="quote">"Quiero expandirme y no sé si es el momento."</p>
+          <p>Ahí entramos nosotros.</p>
+          <p>Cuando las respuestas llegan con claridad, respaldadas por datos y sin rodeos, la relación cambia. Dejamos de ser un servicio y pasamos a ser el equipo que acompaña cada decisión importante.</p>
+        </div>
+      </div>
+      <div>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Problema concreto, diagnóstico real</h4>
+            <p>Identificamos qué está pasando y empezamos a medirlo con datos propios del negocio, no con supuestos.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Claridad y pasos accionables</h4>
+            <p>Transformamos los números en información que se entiende y que sirve para tomar decisiones concretas.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Acompañamiento que crece con el negocio</h4>
+            <p>La confianza se construye cuando ves que la toma de decisiones mejora. Nos convertimos en parte del equipo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services">
+    <div class="services-head">
+      <span class="section-label">Nuestros servicios</span>
+      <h2>Tres ejes de trabajo, una sola dirección</h2>
+      <p>Desde el diagnóstico financiero hasta la toma de decisiones estratégica: siempre con datos, siempre velando por tu negocio.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.07 4.93a10 10 0 0 0-14.14 0M4.93 19.07a10 10 0 0 0 14.14 0M12 2v2M12 20v2M2 12h2M20 12h2"/>
+          </svg>
+        </div>
+        <h3>Tecnología y Datos</h3>
+        <p>De nada sirve analizar datos malos. Primero ordenamos cómo se captura la información: más rápido, menos errores, menos fricción y con una estructura clara. Después la convertimos en accionables concretos.</p>
+        <div class="tags">
+          <span class="badge">Optimización de procesos</span>
+          <span class="badge">Captura de datos</span>
+          <span class="badge">Automatizaciones e IA aplicada</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12h18M3 12c0-3 3-6 9-6s9 3 9 6M3 12c0 3 3 6 9 6s9-3 9-6"/>
+            <circle cx="12" cy="12" r="2"/>
+          </svg>
+        </div>
+        <h3>Asesoramiento Estratégico</h3>
+        <p>Estamos a tu lado cuando tenés que decidir algo importante. Te damos nuestra opinión, basada en datos y en nuestra experiencia, sin sesgos, velando siempre por el negocio y no por la respuesta que querés escuchar.</p>
+        <div class="tags">
+          <span class="badge">Decisiones basadas en datos</span>
+          <span class="badge">Análisis de escenarios</span>
+          <span class="badge">Planeamiento estratégico</span>
+          <span class="badge">Acompañamiento continuo</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="12" width="4" height="9"/>
+            <rect x="10" y="7" width="4" height="14"/>
+            <rect x="17" y="3" width="4" height="18"/>
+          </svg>
+        </div>
+        <h3>Diagnóstico Financiero</h3>
+        <p>Conocer tus números reales es el punto de partida. Te ayudamos a entender dónde está el dinero, dónde se pierde y cuánto necesitás vender para que el negocio sea sano.</p>
+        <div class="tags">
+          <span class="badge">Estructura de costos</span>
+          <span class="badge">Rentabilidad</span>
+          <span class="badge">Punto de equilibrio</span>
+          <span class="badge">Márgenes por producto</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DIFFERENTIATORS -->
+  <section class="diff">
+    <div class="diff-grid">
+      <div class="diff-left">
+        <span class="section-label">Por qué nos eligen</span>
+        <h2><em>Velamos por tu negocio</em>, no por tu aprobación</h2>
+        <p>No te decimos lo que querés escuchar. Somos los que te dicen lo que necesitás saber — con los datos que lo respaldan y con el compromiso de estar presentes cuando tomes la decisión.</p>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <strong>Datos y experiencia</strong>
+            <span>como base de cada recomendación</span>
+          </div>
+          <div class="stat-box">
+            <strong>Pymes</strong>
+            <span>Nuestro foco y nuestro lenguaje</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="diff-item">
+          <div class="diff-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              <line x1="19" y1="11" x2="19" y2="17"/>
+              <line x1="22" y1="14" x2="16" y2="14"/>
+            </svg>
+          </div>
+          <div>
+            <h4>Mirada externa, compromiso interno</h4>
+            <p>Vemos lo que vos no ves porque estás adentro del negocio. Pero nos involucramos como si fuera nuestro.</p>
+          </div>
+        </div>
+        <div class="diff-item">
+          <div class="diff-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <div>
+            <h4>Recomendaciones que se pueden ejecutar</h4>
+            <p>Cada análisis termina en pasos claros y priorizados, identificando riesgos y oportunidades.</p>
+          </div>
+        </div>
+        <div class="diff-item">
+          <div class="diff-item-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <div>
+            <h4>Confidencialidad y confianza real</h4>
+            <p>Los empresarios nos comparten sus números reales porque saben que estamos de su lado. Sin conflicto de interés.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container" style="text-align:center;">
+      <span class="section-label" style="display:block; text-align:center;">Siguiente paso</span>
+      <h2>¿Conversamos?</h2>
+      <p>100% gratuito, sin formularios ni compromisos. Contanos sobre tu negocio, tus inquietudes y vemos cómo podemos ayudarte.</p>
+      <div class="btn-group" style="justify-content:center;">
+        <a href="https://wa.me/5491153243493?text=%C2%A1Hola!%20Vengo%20desde%20la%20web%2C%20me%20gustar%C3%ADa%20consultar%20sobre%20sus%20soluciones." class="btn-primary" target="_blank">Escribinos por WhatsApp</a>
+        <a href="mailto:bernabeuasociados@gmail.com" class="btn-outline">Enviar un mail</a>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page-inicio -->
+
+
+<!-- ══════════════ NOSOTROS ══════════════ -->
+<div id="page-nosotros" class="page">
+  <section class="nosotros">
+    <h1>Sobre Nosotros</h1>
+    <div class="nosotros-text">
+      <p>Somos un equipo de jóvenes profesionales con una mirada fresca y actual sobre los desafíos que enfrentan las pymes y las empresas familiares.</p>
+      <p>Nuestro propósito es claro: ayudarte a ordenar y fortalecer la administración, las finanzas y la contabilidad de tu negocio, para que puedas tomar decisiones inteligentes, con mayor claridad y tranquilidad.</p>
+      <p>Sabemos lo que significa estar al frente de una empresa y entendemos que, muchas veces, el día a día no deja espacio para poner en orden lo importante.</p>
+      <p>Por eso estamos acá: para acompañarte con herramientas prácticas, compromiso real y una visión estratégica pensada para crecer juntos.</p>
+    </div>
+
+    <h2>Nuestro Equipo</h2>
+    <div class="team-grid">
+
+      <div class="team-member">
+        <div class="team-avatar">PB</div>
+        <h3>Pedro J. Bernabeu</h3>
+        <p>Director</p>
+      </div>
+
+      <div class="team-member">
+        <div class="team-avatar">GL</div>
+        <h3>Gregorio Lazarte</h3>
+        <p>Soporte Administrativo</p>
+      </div>
+
+      <div class="team-member">
+        <div class="team-avatar">PB</div>
+        <h3>Pablo Bermejo</h3>
+        <p>Soporte Administrativo</p>
+      </div>
+
+      <div class="team-member">
+        <div class="team-avatar">JG</div>
+        <h3>Juan Manuel Gómez</h3>
+        <p>Contable</p>
+      </div>
+
+      <div class="team-member">
+        <div class="team-avatar">FP</div>
+        <h3>Facundo Plaza</h3>
+        <p>Ejecutivo de Cuentas</p>
+      </div>
+
+      <div class="team-member">
+        <div class="team-avatar">DL</div>
+        <h3>David Lopez</h3>
+        <p>Desarrollador Web</p>
+      </div>
+
+    </div>
+  </section>
+</div><!-- /page-nosotros -->
+
+
+<!-- ══════════════ EMPRESAS ══════════════ -->
+<div id="page-empresas" class="page">
+  <section class="empresas">
+    <div class="empresas-header">
+      <h1>Empresas</h1>
+      <p>Comunidad de empresas adheridas a Bernabeu &amp; Asociados</p>
+    </div>
+
+    <div class="companies-grid">
+
+      <div class="company-card">
+        <div class="company-logo"><div class="company-logo-placeholder">🍕</div></div>
+        <h2>Pizzería Don Carmelo</h2>
+        <p>La mejor pizza artesanal de barrio con más de 20 años en el rubro</p>
+        <div class="more-link">Beneficios
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <div class="company-card">
+        <div class="company-logo"><div class="company-logo-placeholder">🏋️</div></div>
+        <h2>Gym Power</h2>
+        <p>Equipamiento de primer nivel y entrenadores certificados</p>
+        <div class="more-link">Beneficios
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <div class="company-card">
+        <div class="company-logo"><div class="company-logo-placeholder">☕</div></div>
+        <h2>Café Almendra</h2>
+        <p>Cafetería boutique con granos de especialidad y ambiente cálido</p>
+        <div class="more-link">Beneficios
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <div class="company-card">
+        <div class="company-logo"><div class="company-logo-placeholder">💻</div></div>
+        <h2>TechSoluciones</h2>
+        <p>Servicios de IT, reparación y soporte técnico empresarial</p>
+        <div class="more-link">Beneficios
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <div class="company-card">
+        <div class="company-logo"><div class="company-logo-placeholder">🌿</div></div>
+        <h2>Dietética Natura</h2>
+        <p>Productos naturales, orgánicos y suplementos de calidad</p>
+        <div class="more-link">Beneficios
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <div class="company-card">
+        <div class="company-logo"><div class="company-logo-placeholder">🔧</div></div>
+        <h2>Ferrería El Tornillo</h2>
+        <p>Herramientas, materiales de construcción y ferretería completa</p>
+        <div class="more-link">Beneficios
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <div class="company-card">
+        <div class="company-logo"><div class="company-logo-placeholder">👗</div></div>
+        <h2>Moda Elisa</h2>
+        <p>Indumentaria femenina con las últimas tendencias de temporada</p>
+        <div class="more-link">Beneficios
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+      <div class="company-card">
+        <div class="company-logo"><div class="company-logo-placeholder">🚗</div></div>
+        <h2>Autoservicio Rápido</h2>
+        <p>Lavado, lubricación y mantenimiento de vehículos en el día</p>
+        <div class="more-link">Beneficios
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+
+    </div>
+
+    <p style="text-align:center; margin-top:2.5rem; font-size:0.85rem; color:var(--gray-400);">
+      * Las tarjetas de empresas se cargan dinámicamente desde la base de datos de la plataforma.
+    </p>
+  </section>
+</div><!-- /page-empresas -->
+
+
+<!-- ══════════════ CONTACTO ══════════════ -->
+<div id="page-contacto" class="page">
+  <section class="contacto">
+    <h1>Contacto</h1>
+    <div class="contacto-text">
+      <p>¿Tenés preguntas, ideas o querés trabajar con nosotros? Estamos siempre disponibles para escucharte. Podés escribirnos o enviarnos un mensaje directo por WhatsApp.</p>
+
+      <div class="contact-card">
+        <div class="contact-item">
+          <h2>📧 Correo electrónico</h2>
+          <a href="mailto:bernabeuasociados@gmail.com">bernabeuasociados@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          <h2>📱 WhatsApp</h2>
+          <a href="https://wa.me/5491153243493?text=%C2%A1Hola!%20Vengo%20desde%20la%20Comunidad%20de%20B%26A" class="green" target="_blank">+54 9 11 5324-3493</a>
+        </div>
+      </div>
+
+      <p class="contacto-footer">Podés escribirnos los 365 días del año, las 24 horas.</p>
+    </div>
+  </section>
+</div><!-- /page-contacto -->
+
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <span>Bernabeu &amp; Asociados</span> — Consultora Empresarial &copy; 2025
+</footer>
+
+
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+
+    document.querySelectorAll('.nav-links a, .mobile-menu a').forEach(a => a.classList.remove('active'));
+    const el = document.getElementById('nav-' + name);
+    if (el) el.classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Activar enlace inicial
+  document.getElementById('nav-inicio').classList.add('active');
+</script>
+</body>
+</html>
