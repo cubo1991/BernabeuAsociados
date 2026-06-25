@@ -1,5 +1,10 @@
 "use client";
 
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import equipo from '@/data/equipo';
+import { getEmpresas } from '@/services/Empresas/EmpresasService';
+
 const servicios = [
   {
     icon: (
@@ -92,7 +97,40 @@ const diferenciales = [
   },
 ];
 
+const TARGET_AREA = 96 * 96;
+
+function LogoItem({ companyName, logoUrl }) {
+  const [size, setSize] = useState({ width: 96, height: 96 });
+
+  return (
+    <div
+      style={{ position: 'relative', width: size.width, height: size.height }}
+      className="grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300"
+    >
+      <Image
+        src={logoUrl}
+        alt={`Logo de ${companyName}`}
+        fill
+        className="object-contain"
+        onLoad={(e) => {
+          const { naturalWidth, naturalHeight } = e.target;
+          const ratio = naturalWidth / naturalHeight;
+          const h = Math.round(Math.sqrt(TARGET_AREA / ratio));
+          const w = Math.round(Math.sqrt(TARGET_AREA * ratio));
+          setSize({ width: Math.min(w, 220), height: Math.max(h, 40) });
+        }}
+      />
+    </div>
+  );
+}
+
 export default function HomePage() {
+  const [empresas, setEmpresas] = useState([]);
+
+  useEffect(() => {
+    getEmpresas().then(setEmpresas).catch(() => {});
+  }, []);
+
   return (
     <main className="text-gray-800">
 
@@ -119,12 +157,53 @@ export default function HomePage() {
           >
             Hablemos
           </a>
-          <a
-            href="/nosotros"
-            className="inline-block px-8 py-3 rounded-lg font-semibold text-gray-300 border border-gray-600 transition-all hover:border-gray-400 hover:text-white"
-          >
-            Conocé el equipo
-          </a>
+        </div>
+      </section>
+
+      {/* EQUIPO */}
+      <section className="bg-white py-16 overflow-hidden">
+        <style>{`
+          @keyframes marquee-team {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+          }
+          .marquee-team {
+            animation: marquee-team 28s linear infinite;
+          }
+          .marquee-team:hover {
+            animation-play-state: paused;
+          }
+        `}</style>
+
+        <div className="text-center mb-12 px-10">
+          <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--font-color)" }}>
+            Nuestro equipo
+          </p>
+          <h2 className="text-3xl font-bold text-gray-900">Las personas detrás del trabajo</h2>
+        </div>
+
+        <div
+          className="relative"
+          style={{
+            maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+          }}
+        >
+          <div className="marquee-team flex gap-12 w-max">
+            {[...equipo, ...equipo].map(({ name, role, image }, i) => (
+              <div key={`${name}-${i}`} className="flex flex-col items-center text-center shrink-0 w-36">
+                <Image
+                  src={image}
+                  alt={`${name.trim()}, ${role}`}
+                  width={128}
+                  height={128}
+                  className="w-32 h-32 rounded-full object-cover mb-4 shadow-md"
+                />
+                <h3 className="text-sm font-semibold text-gray-900 leading-snug">{name.trim()}</h3>
+                <p className="text-xs text-gray-500 mt-1">{role}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -266,6 +345,25 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* CONFÍAN EN NOSOTROS */}
+      {empresas.length > 0 && (
+        <section className="bg-gray-50 py-16 px-10">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-10">
+              <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--font-color)" }}>
+                Clientes
+              </p>
+              <h2 className="text-3xl font-bold text-gray-900">Confían en nosotros</h2>
+            </div>
+            <div className="flex flex-wrap justify-center gap-10 items-center">
+              {empresas.map(({ id, companyName, logoUrl }) => (
+                <LogoItem key={id} companyName={companyName} logoUrl={logoUrl} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="bg-white py-16 px-10 text-center">
