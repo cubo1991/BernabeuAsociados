@@ -161,49 +161,28 @@ export default function HomePage() {
       </section>
 
       {/* EQUIPO */}
-      <section className="bg-white py-16 overflow-hidden">
-        <style>{`
-          @keyframes marquee-team {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-          }
-          .marquee-team {
-            animation: marquee-team 28s linear infinite;
-          }
-          .marquee-team:hover {
-            animation-play-state: paused;
-          }
-        `}</style>
-
-        <div className="text-center mb-12 px-10">
+      <section className="bg-white py-16 px-10">
+        <div className="text-center mb-12">
           <p className="text-xs font-semibold tracking-widest uppercase mb-3" style={{ color: "var(--font-color)" }}>
             Nuestro equipo
           </p>
           <h2 className="text-3xl font-bold text-gray-900">Las personas detrás del trabajo</h2>
         </div>
 
-        <div
-          className="relative"
-          style={{
-            maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-          }}
-        >
-          <div className="marquee-team flex gap-12 w-max">
-            {[...equipo, ...equipo].map(({ name, role, image }, i) => (
-              <div key={`${name}-${i}`} className="flex flex-col items-center text-center shrink-0 w-36">
-                <Image
-                  src={image}
-                  alt={`${name.trim()}, ${role}`}
-                  width={128}
-                  height={128}
-                  className="w-32 h-32 rounded-full object-cover mb-4 shadow-md"
-                />
-                <h3 className="text-sm font-semibold text-gray-900 leading-snug">{name.trim()}</h3>
-                <p className="text-xs text-gray-500 mt-1">{role}</p>
-              </div>
-            ))}
-          </div>
+        <div className="max-w-5xl mx-auto flex flex-wrap justify-center gap-x-12 gap-y-10">
+          {equipo.map(({ name, role, image }) => (
+            <div key={name} className="flex flex-col items-center text-center w-36">
+              <Image
+                src={image}
+                alt={`${name.trim()}, ${role}`}
+                width={128}
+                height={128}
+                className="w-32 h-32 rounded-full object-cover mb-4 shadow-md"
+              />
+              <h3 className="text-sm font-semibold text-gray-900 leading-snug">{name.trim()}</h3>
+              <p className="text-xs text-gray-500 mt-1">{role}</p>
+            </div>
+          ))}
         </div>
       </section>
 
