@@ -1,20 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import BenefitBadge from './BenefitBadtge';
-import BenefitRibbon from './BenefitRibbon';
-import Link from 'next/link';
-import { MoveRight } from "lucide-react";
+import { MessageCircle, Instagram, Globe, MapPin } from 'lucide-react';
 
-
-
-
-
-
-
-
-
-export default function CompanyCard({ companyName, id, logoUrl, benefit, benefitType, phone, contactLink, description, contactType }) {
+export default function CompanyCard({ companyName, logoUrl, phone, contactLink, description, contactType, address }) {
   const ref = useRef();
   const [visible, setVisible] = useState(false);
 
@@ -34,51 +23,55 @@ export default function CompanyCard({ companyName, id, logoUrl, benefit, benefit
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
       }  md:aspect-auto`}
     >
- 
 
       {/* Logo */}
       <div className="logo-container w-full h-32 md:w-50 md:h-50 mb-3 relative flex-shrink-0">
-        <Link href={`/empresas/${id}`}>
-          <Image
-            src={logoUrl}
-            alt={`Logo de ${companyName}`}
-            fill
-            className="object-contain rounded-lg logo-hover border-2"
-          />
-        </Link>
+        <Image
+          src={logoUrl}
+          alt={`Logo de ${companyName}`}
+          fill
+          className="object-contain rounded-lg logo-hover border-2"
+        />
       </div>
 
       {/* Info */}
       <div className="flex-grow flex flex-col justify-center overflow-hidden">
-        <Link href={`/empresas/${id}`}>
-          <h2 className="text-xl font-bold text-black hover:text-indigo-800 transition-colors duration-200 underline-offset-2 hover:underline line-clamp-2">
-            {companyName}
-          </h2>
-        </Link>
+        <h2 className="text-xl font-bold text-black line-clamp-2">
+          {companyName}
+        </h2>
 
+        <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
 
+        <div className="flex flex-col items-center gap-1 mt-2 text-sm">
+          {phone && (
+            <a
+              href={`https://wa.me/${phone}?text=${encodeURIComponent('Hola! Vengo desde la Comunidad de B&A, me gustaría estar en contacto con ustedes.')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-green-600 hover:underline"
+            >
+              <MessageCircle className="w-4 h-4" /> WhatsApp
+            </a>
+          )}
 
-         <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
-        {/*{(contactType === 'Instagram' || contactType === 'Sitio Web') && (
-          <a href={contactLink} className="text-indigo-600 mt-2 hover:underline text-sm">
-            {contactType}
-          </a>
-        )}
-        <a
-          href={`https://wa.me/${phone}?text=${encodeURIComponent('Hola! Vengo desde la Comunidad de B&A, me gustaría estar en contacto con ustedes.')}`}
-          className="text-sm text-gray-600 mt-2"
-        >
-          Whatsapp
-        </a> */}
-      <Link href={`/empresas/${id}`} className="mt-2 text-indigo-600 hover:underline text-sm">
-       <div className="flex items-center justify-center gap-1">
+          {contactLink && (contactType === 'Instagram' || contactType === 'Sitio Web') && (
+            <a
+              href={contactLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-indigo-600 hover:underline"
+            >
+              {contactType === 'Instagram' ? <Instagram className="w-4 h-4" /> : <Globe className="w-4 h-4" />}
+              {contactType}
+            </a>
+          )}
 
-        <p>Beneficios</p> 
-    <div className="flex justify-center">
-  <MoveRight className="w-6 h-6" />
-</div>
-       </div>
-      </Link>
+          {address && (
+            <span className="flex items-center gap-1 text-gray-500">
+              <MapPin className="w-4 h-4" /> {address}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
